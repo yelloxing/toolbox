@@ -448,12 +448,12 @@ window.__pkg__bundleSrc__['127']=function(){
 
     // 画布或图像大小
     size: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle24.js','128')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle24.js','128')
     },
 
     // 保存
     save: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle25.js','129')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle25.js','129')
     }
 
 };
@@ -471,12 +471,12 @@ window.__pkg__bundleSrc__['130']=function(){
 
     // 工具箱
     tool: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle26.js','131')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle26.js','131')
     },
 
     // 图层
     layer: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle27.js','132')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle27.js','132')
     }
 
 };
@@ -609,6 +609,9 @@ __pkg__scope_bundle__.default= function (canvas, width, height) {
 
     // 画笔
     var enhancePainter = {
+
+        // 原生画笔
+        painter: painter,
 
         // 属性设置或获取
         "config": function () {

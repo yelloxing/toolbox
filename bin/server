@@ -32,7 +32,14 @@ let server = http.createServer(function (request, response) {
             response.writeHead(200, {
                 'content-type': "text/html;charset=utf-8"
             });
-            response.write((template + "").replace('<!-- built files will be auto injected -->', globalScript + '<script defer="defer" src="' + config.entry + '" type="module"></script>'));
+            response.write(
+                (template + "")
+                    .replace(
+                        '<!-- built files will be auto injected -->',
+                        globalScript + '<script defer="defer" src="' + config.entry + '" type="module"></script>' +
+                        '<script defer="defer" src="./bin/client/static.js"></script>'
+                    )
+            );
         }
 
         // 其余就是普通文件
@@ -59,3 +66,6 @@ let server = http.createServer(function (request, response) {
 
 server.listen(config.devServer.port);
 log('Server running on port:' + config.devServer.port);
+
+// 启动ws服务器
+require('./WebSocket/index')();

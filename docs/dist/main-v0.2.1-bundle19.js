@@ -130,32 +130,32 @@ window.__pkg__bundleSrc__['188']=function(){
 
     // 内置框架
     framework: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle28.js','189')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle28.js','189')
     },
 
     // 代码编辑器
     editor: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle29.js','190')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle29.js','190')
     },
 
     // WebGL
     webgl: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle30.js','191')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle30.js','191')
     },
 
     // canvas
     canvas: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle31.js','192')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle31.js','192')
     },
 
     // 颜色选择器
     "color-picker": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle32.js','193')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle32.js','193')
     },
 
     // svg
     svg: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.0-bundle33.js','194')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.1-bundle33.js','194')
     }
 };
 

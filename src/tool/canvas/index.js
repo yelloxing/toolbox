@@ -79,6 +79,9 @@ export default function (canvas, width, height) {
     // 画笔
     var enhancePainter = {
 
+        // 原生画笔
+        painter: painter,
+
         // 属性设置或获取
         "config": function () {
             if (arguments.length === 1) {

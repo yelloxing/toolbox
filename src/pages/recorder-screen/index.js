@@ -22,6 +22,9 @@ export default function (obj) {
                 if (!this.isRun) {
                     var videoEl = this._refs.video.value;
 
+                    // 静音播放
+                    videoEl.muted = true;
+
                     // 获取屏幕内容
                     navigator.mediaDevices.getDisplayMedia({
                         video: true,
