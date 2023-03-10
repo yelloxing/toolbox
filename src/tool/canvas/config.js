@@ -34,7 +34,7 @@ export var initText = function (painter, config, x, y, deg) {
     painter.beginPath();
     painter.translate(x, y);
     painter.rotate(deg);
-    painter.font = config['font-size'] + "px " + config['font-family'];
+    painter.font = config['font-style'] + " " + config["font-weight"] + " " + config['font-size'] + "px " + config['font-family'];
     return painter;
 };
 

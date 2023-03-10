@@ -2,10 +2,7 @@
     <h2>
         录屏软件
     </h2>
-    <button ui-on:click="stopRecorder" class="right-btn" ui-bind:active="isRun?'yes':'no'">
-        完成
-    </button>
-    <button ui-on:click="startRecorder" class="left-btn" ui-bind:active="isRun?'no':'yes'">
+    <button ui-on:click="startRecorder" ui-bind:active="isRun?'no':'yes'">
         启动
     </button>
     <div class="win-btns">

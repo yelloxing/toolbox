@@ -1,6 +1,4 @@
-import isObject from '../type/isObject';
 import showData from './showData';
-import toString from './toString';
 
 var console = window.console;
 

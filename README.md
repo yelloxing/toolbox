@@ -1,6 +1,8 @@
 # [toolbox](https://zxl20070701.github.io/toolbox)
 ✔️ 实用工具，包含常见的图片编辑、格式转换、视频播放和小游戏等各种工具
 
+> 温馨提示：我们会根据实际情况升级维护，可能会删除或改名已经存在的内容。
+
 ## 如何开发？
 
 本项目的打包工具等采用自定义设计开发，开发的时候，你需要执行下面的命令启动开发服务器：
@@ -22,6 +24,20 @@ npm run build
 最终的目的一方面用于积累一些前端编程经验，另一方面也是提供一些在线功能来方便日常工作或生活。
 
 >  温馨提示：本项目所有功能均直接基于HTML+CSS+JavaScript浏览器原生开发，未依赖任何第三方库等。
+
+### 支持的模式
+
+我们支持手机和电脑模式，当你使用手机或者电脑浏览器访问的时候，会自动检测后进行效果呈现，具体见下面截图：
+
+- 手机模式访问
+
+<img src="https://zxl20070701.github.io/toolbox/snipping/mobile.jpeg">
+
+- 电脑模式访问
+
+<img src="https://zxl20070701.github.io/toolbox/snipping/pc.jpeg">
+
+### 部分功能清单
 
 下面是部分功能的预览截图：
 
@@ -67,4 +83,4 @@ npm run build
 
 MIT License
 
-Copyright (c) zxl20070701 走一步，再走一步
+Copyright (c) [zxl20070701](https://zxl20070701.github.io/notebook/home.html) 走一步，再走一步

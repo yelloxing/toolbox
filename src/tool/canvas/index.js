@@ -4,7 +4,7 @@ import { initPainterConfig } from './config';
 
 // 画笔对象
 
-export default function (canvas, width, height) {
+export default function (canvas, width, height, opts) {
 
     // 设置宽
     if (width) {
@@ -18,7 +18,7 @@ export default function (canvas, width, height) {
         canvas.setAttribute('height', height);
     }
 
-    var painter = canvas.getContext("2d");
+    var painter = canvas.getContext("2d", opts || {});
 
     // 默认配置canvas2D对象已经存在的属性
     painter.textBaseline = 'middle';
@@ -31,8 +31,14 @@ export default function (canvas, width, height) {
         // 文字大小
         "font-size": 16,
 
-        // 字体，默认"sans-serif"
+        // 字体
         "font-family": "sans-serif",
+
+        // 字重
+        "font-weight": 400,
+
+        // 字类型
+        "font-style": "normal",
 
         // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合）
         "arc-start-cap": 'butt',
@@ -51,7 +57,7 @@ export default function (canvas, width, height) {
          */
 
         if (key == 'lineDash') {
-            painter.setLineDash(value);
+            if (painter.setLineDash) painter.setLineDash(value);
         }
 
         /**
@@ -61,7 +67,7 @@ export default function (canvas, width, height) {
          */
 
         // 如果已经存在默认配置中，说明只需要缓存起来即可
-        else if (["font-size", "font-family", "arc-start-cap", "arc-end-cap"].indexOf(key) > -1) {
+        else if (key in config) {
             config[key] = value;
         }
 
@@ -78,6 +84,7 @@ export default function (canvas, width, height) {
 
     // 画笔
     var enhancePainter = {
+        __only__painter__: true,
 
         // 原生画笔
         painter: painter,
@@ -130,8 +137,13 @@ export default function (canvas, width, height) {
         // 路径
         "beginPath": function () { painter.beginPath(); return enhancePainter; },
         "closePath": function () { painter.closePath(); return enhancePainter; },
-        "moveTo": function (x, y) { painter.moveTo(x, y); return enhancePainter; },
-        "lineTo": function (x, y) { painter.lineTo(x, y); return enhancePainter; },
+        "moveTo": function (x, y) {
+
+            // 解决1px模糊问题，别的地方类似原因
+            painter.moveTo(Math.round(x) + 0.5, Math.round(y) + 0.5);
+            return enhancePainter;
+        },
+        "lineTo": function (x, y) { painter.lineTo(Math.round(x) + 0.5, Math.round(y) + 0.5); return enhancePainter; },
         "arc": function (x, y, r, beginDeg, deg) {
             painter.arc(x, y, r, beginDeg, beginDeg + deg, deg < 0);
             return enhancePainter;
@@ -202,6 +214,12 @@ export default function (canvas, width, height) {
             return canvas.toDataURL(type);
         },
 
+        // 获取指定位置颜色
+        "getColor": function (x, y) {
+            var currentRGBA = painter.getImageData(x - 0.5, y - 0.5, 1, 1).data;
+            return "rgba(" + currentRGBA[0] + "," + currentRGBA[1] + "," + currentRGBA[2] + "," + currentRGBA[3] + ")";
+        },
+
         // image
         "drawImage": function (img, sx, sy, sw, sh, x, y, w, h) {
             sx = sx || 0;
@@ -235,8 +253,13 @@ export default function (canvas, width, height) {
         },
 
         // 环形渐变
-        "createRadialGradient": function (cx, cy, r) {
-            return radialGradient(painter, cx, cy, r);
+        "createRadialGradient": function (cx, cy, r1, r2) {
+            if (arguments.length < 4) {
+                return radialGradient(painter, cx, cy, 0, r1);
+            } else {
+                return radialGradient(painter, cx, cy, r1, r2);
+            }
+
         }
 
     };

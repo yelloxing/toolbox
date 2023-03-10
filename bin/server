@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const { log, error } = require('../nodejs/log');
 const { fullPath } = require('../nodejs/path');
+const responseFileList = require('./responseFileList');
 
 const globalScript = require('./global');
 
@@ -44,21 +45,27 @@ let server = http.createServer(function (request, response) {
 
         // 其余就是普通文件
         else {
+
             let result = config.$readFileSync("." + request.url);
             response.writeHead(200, {
                 'content-type': result.type + ";charset=utf-8"
             });
             response.write(result.content);
+
         }
 
 
     } catch (e) {
+
+        // 打印错误并返回404页面
         error(e);
 
-        response.writeHead(500, {
-            'content-type': "text/plain;charset=utf-8"
+        let filePath = fullPath(request.url.replace(/^\//, ""), process.cwd());
+
+        response.writeHead(404, {
+            'content-type': "text/html;charset=utf-8"
         });
-        response.write(e + "");
+        response.write(responseFileList(filePath));
     }
 
     response.end();

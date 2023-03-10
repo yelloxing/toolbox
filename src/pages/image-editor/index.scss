@@ -129,10 +129,28 @@
                 }
 
                 &>li {
-                    padding: 0 5px;
+                    padding-left: 20px;
+                    display: inline-block;
 
                     &>input {
-                        width: 50px;
+                        &[type="text"] {
+                            width: 50px;
+                        }
+
+                        &[type='radio'] {
+                            vertical-align: sub;
+                            margin-left: 10px;
+                        }
+                    }
+
+                    &>button {
+                        outline: none;
+                        border: none;
+                        background-color: black;
+                        color: white;
+                        font-size: 12px;
+                        border-radius: 5px;
+                        cursor: pointer;
                     }
                 }
             }

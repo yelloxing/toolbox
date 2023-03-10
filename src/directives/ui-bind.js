@@ -1,4 +1,5 @@
 import isString from '../tool/type/isString.js';
+import updateValue from "../tool/xhtml/updateValue.js";
 
 var doit = function (el, binding) {
 
@@ -12,11 +13,7 @@ var doit = function (el, binding) {
 
     // 否则是设置内容或值
     else {
-
-        if (el.value != binding.value || el.textContent != binding.value) {
-            el.value = el.textContent = binding.value;
-        }
-
+        updateValue(el, binding.value);
     }
 
 }

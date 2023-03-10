@@ -24,7 +24,7 @@ export default function (maxValue, minValue, num) {
             var _times100_base = (_value < 100 && _value > -100) ? 10 : 0.1;
 
             // 记录当前缩放倍数
-            var _times100 = 1, _tiemsValue = _value;
+            var _times100 = -1, _tiemsValue = _value;
 
             while (_times100_base == 10 ?
                 // 如果是放大，超过 -100 ~ 100 就应该停止
@@ -34,12 +34,22 @@ export default function (maxValue, minValue, num) {
                 (_tiemsValue <= -100 || _tiemsValue >= 100)
             ) {
 
-                _times100 *= _times100_base;
+                _times100 += 1;
                 _tiemsValue *= _times100_base;
 
             }
 
-            return _times100;
+            if (_times100_base == 10) {
+                return Math.pow(10, _times100);
+            } else {
+
+                // 解决类似 0.1 * 0.1 = 0.010000000000000002 浮点运算不准确问题
+                var temp = "0.", i;
+                for (i = 1; i < _times100; i++) {
+                    temp += "0";
+                }
+                return +(temp + "1");
+            }
         })
 
             // 根据差值来缩放
@@ -47,7 +57,33 @@ export default function (maxValue, minValue, num) {
 
 
     // 求解出 -100 ~ 100 的最佳间距值 后直接转换原来的倍数
-    var distance = Math.ceil((maxValue - minValue) * times100 / num) / times100;
+    var distance100 = Math.ceil((maxValue - minValue) * times100 / num);
+
+    // 校对一下
+    distance100 = {
+        3: 2,
+        4: 5,
+        6: 5,
+        7: 5,
+        8: 10,
+        9: 10,
+        11: 10,
+        12: 10,
+        13: 15,
+        14: 15,
+        16: 15,
+        17: 15,
+        18: 20,
+        19: 20,
+        21: 20,
+        22: 20,
+        23: 25,
+        24: 25,
+        26: 25,
+        27: 25
+    }[distance100] || distance100;
+
+    var distance = distance100 / times100;
 
     // 最小值，也就是起点
     var begin = Math.floor(minValue / distance) * distance;

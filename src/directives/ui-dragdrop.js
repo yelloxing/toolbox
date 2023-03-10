@@ -1,7 +1,9 @@
 import bind from "../tool/xhtml/bind";
 import unbind from "../tool/xhtml/unbind";
 import getStyle from "../tool/xhtml/getStyle";
+import { platformName } from '../tool/browser/platform';
 
+var _platformName = platformName();
 export default {
 
     inserted: function (el, binding) {
@@ -15,14 +17,14 @@ export default {
         }
 
         //绑定鼠标左键按下事件
-        bind(el, 'mousedown', function mousedown(event) {
+        bind(el, _platformName == 'mobile' ? 'touchstart' : 'mousedown', function mousedown(event) {
             event.stopPropagation();
 
             //解决浏览器全选无法拖拽弹框
             el.setCapture && el.setCapture();
 
-            var lf = event.clientX;
-            var tp = event.clientY;
+            var lf = _platformName == 'mobile' ? event.touches[0].clientX : event.clientX;
+            var tp = _platformName == 'mobile' ? event.touches[0].clientY : event.clientY;
 
             if (binding.type == 'desktop') {
                 bindingValue = [0, 50 - _el.clientWidth, _el.clientHeight - 50, 50 - _el.clientWidth];
@@ -35,8 +37,8 @@ export default {
             function mousemove(event) {
                 event.stopPropagation();
 
-                var newLeft = left - - event.clientX - lf;
-                var newTop = top - - event.clientY - tp;
+                var newLeft = left - - (_platformName == 'mobile' ? event.touches[0].clientX : event.clientX) - lf;
+                var newTop = top - - (_platformName == 'mobile' ? event.touches[0].clientY : event.clientY) - tp;
 
                 // 判断水平是否越界
                 if (newLeft > bindingValue[3] && newLeft + _el.clientWidth < window.innerWidth - bindingValue[1]) {
@@ -72,13 +74,13 @@ export default {
                 _el.style.bottom = 'auto';
 
             }
-            bind(document, 'mousemove', mousemove);
+            bind(document, _platformName == 'mobile' ? 'touchmove' : 'mousemove', mousemove);
 
             //绑定鼠标松开事件,清除鼠标移动绑定
-            bind(document, 'mouseup', function (event) {
+            bind(document, _platformName == 'mobile' ? 'touchend' : 'mouseup', function (event) {
                 event.stopPropagation();
 
-                unbind(document, 'mousemove', mousemove);
+                unbind(document, _platformName == 'mobile' ? 'touchmove' : 'mousemove', mousemove);
                 _el.releaseCapture && _el.releaseCapture();
                 return false;
             });

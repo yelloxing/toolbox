@@ -49,6 +49,10 @@ export default function (obj) {
                             chunks.push(event.data);
                         });
 
+                        stream.getVideoTracks()[0].onended = function () {
+                            mediaRecorder.stop();
+                        };
+
                         // 停止的时候下载
                         mediaRecorder.addEventListener("stop", function () {
                             var blob = new Blob(chunks, {
@@ -74,15 +78,6 @@ export default function (obj) {
                     alert("正在录制中，请点击‘完成’按钮结束后再启动新的录制程序！");
                 }
 
-            },
-
-            // 结束录制
-            stopRecorder: function () {
-                if (this.isRun) {
-                    mediaRecorder.stop();
-                } else {
-                    alert("没有正在录制的内容，请先点击‘启动’按钮开始录制程序！");
-                }
             }
         }
     };

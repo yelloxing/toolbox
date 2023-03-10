@@ -12,7 +12,21 @@ import remove from '../../tool/xhtml/remove';
 import isString from '../../tool/type/isString';
 
 export default function (obj) {
+    var i;
+
     var wins = {}, painter, layerRootEl;
+
+    // 记录鼠标是否按下
+    var mouseIsDown = false;
+
+    // 辅助画布
+    var helpImg = {
+        canvas: document.createElement('canvas'),
+        painter: null
+    }
+
+    // 标记当前窗口是否处于聚焦状态
+    var isFocus = false;
 
     return {
         name: "image-editor",
@@ -21,6 +35,11 @@ export default function (obj) {
 
             width: obj.ref(700), // 画布的大小
             height: obj.ref(500),
+
+            left: obj.ref(0), // 画布的位置
+            top: obj.ref(0),
+
+            scale: obj.ref(1), // 画布缩放倍数
 
             activeTool: obj.ref('move'), // 当前的工具
             isMenuOpen: obj.reactive({}), // 菜单是否打开
@@ -39,15 +58,20 @@ export default function (obj) {
             eraser_size: obj.ref(10), // 橡皮擦大小
 
             // 背景橡皮擦
-            eraser_bg_size: obj.ref(10) // 橡皮擦大小
+            eraser_bg_size: obj.ref(10), // 橡皮擦大小
 
             // 抓手工具
+            drap_size: obj.ref(50), // 单次移动距离
 
             // 画笔
+            painter_size: obj.ref(10), // 画笔大小
 
             // 缩放工具
+            resize_direction: obj.ref("amplify"), // 放大（amplify）还是缩小（reduce）
+            resize_velocity: obj.ref(0.1), // 改变速度
 
             // 文字
+            text_size: obj.ref(16) // 文字大小
         },
         beforeFocus: function () {
             document.getElementsByTagName('title')[0].innerText = "图片编辑器" + window.systeName;
@@ -56,6 +80,9 @@ export default function (obj) {
         mounted: function () {
             var _this = this;
             painter = canvasRender(this._refs.mycanvas.value, this.width, this.height);
+
+            // 调整辅助画布大小
+            helpImg.painter = canvasRender(helpImg.canvas, this.width, this.height);
 
             Promise.all([
                 this.$openWin(lazyWins.layer),
@@ -74,31 +101,71 @@ export default function (obj) {
 
             // 启动键盘监听
             getKeyCode(function (keyCode, event) {
+                if (isFocus) {
 
-                // 移动
-                if (_this.activeTool == 'move') {
+                    // 移动
+                    if (_this.activeTool == 'move') {
+                        var leftTop = {
+                            "up": [0, -_this.move_size],
+                            "down": [0, _this.move_size],
+                            "left": [-_this.move_size, 0],
+                            "right": [_this.move_size, 0]
+                        }[keyCode] || false;
+
+                        // 如果不是方向键，不需要任何操作
+                        if (leftTop) _this.doMove(leftTop[0], leftTop[1]);
+                    }
+
+                    // 抓手工具
+                    else if (_this.activeTool == 'drap') {
+
+                        if (keyCode == 'up') _this.top += _this.drap_size;
+                        else if (keyCode == 'down') _this.top -= _this.drap_size;
+                        else if (keyCode == 'left') _this.left += _this.drap_size;
+                        else if (keyCode == 'right') _this.left -= _this.drap_size;
+
+                    }
 
                 }
-
-                // 抓手工具
-                else if (_this.activeTool == 'drap') {
-
-                }
-
             });
 
             // 鼠标按下
-            bind(document.body, 'mousedown', function () {
-
+            bind(_this._refs.mycanvas.value, 'mousedown', function () {
+                mouseIsDown = true;
             });
 
             // 鼠标移动
             bind(document.body, 'mousemove', function () {
+                if (mouseIsDown) {
 
+                    // 移动
+                    if (_this.activeTool == 'move') {
+
+                    }
+
+                    // 抓手工具
+                    else if (_this.activeTool == 'drap') {
+
+                    }
+
+                }
             });
 
             // 鼠标松开
             bind(document.body, 'mouseup', function () {
+                mouseIsDown = false;
+            });
+
+            // 鼠标点击
+            bind(_this._refs.mycanvas.value, 'click', function (event) {
+
+                // 缩放
+                if (_this.activeTool == 'resize') {
+                    _this.scale += {
+                        amplify: 1,
+                        reduce: -1
+                    }[_this.resize_direction] * _this.resize_velocity;
+                }
 
             });
 
@@ -113,6 +180,8 @@ export default function (obj) {
             wins = {};
         },
         beforeUnfocus: function () {
+            isFocus = false;
+
             // 关闭所有的win窗口
             for (var winName in wins) {
                 if (this.isMenuOpen[winName]) {
@@ -121,6 +190,8 @@ export default function (obj) {
             }
         },
         focused: function () {
+            isFocus = true;
+
             // 显示本来应该打开的窗口
             for (var winName in wins) {
                 if (this.isMenuOpen[winName]) {
@@ -131,6 +202,35 @@ export default function (obj) {
         methods: {
             triggleBtn: function (event, target) {
                 this._refs[target.getAttribute('tag')].value.click();
+            },
+
+            // 移动内容
+            doMove: function (dx, dy) {
+                // 先擦出画布
+                painter.clearRect(0, 0, this.width, this.height);
+
+                for (i = this.layers.length - 1; i >= 0; i--) {
+
+                    // 被选中的需要修改记录的canvas内容
+                    if (this.layers[i].rootEl.getAttribute('active') == 'yes') {
+
+                        helpImg.painter.clearRect(0, 0, this.width, this.height);
+                        helpImg.painter.drawImage(this.layers[i].canvas);
+
+                        this.layers[i].painter.clearRect(0, 0, this.width, this.height);
+                        this.layers[i].painter.drawImage(helpImg.canvas, 0, 0, this.width, this.height, dx, dy, this.width, this.height);
+
+                        this.layers[i].iconEl.style.backgroundImage = "url(" + this.layers[i].painter.toDataURL() + ")";
+                    }
+
+
+                    painter.drawImage(this.layers[i].canvas);
+                }
+            },
+
+            // 恢复缩放
+            resetSize: function () {
+                this.scale = 1;
             },
 
             // 新窗口初始化处理
@@ -208,6 +308,9 @@ export default function (obj) {
                     _this.height = data.height;
                     painter = canvasRender(_this._refs.mycanvas.value, _this.width, _this.height);
 
+                    // 调整辅助画布大小
+                    helpImg.painter = canvasRender(helpImg.canvas, _this.width, _this.height);
+
                     // 一个个图层调整好
                     (function doit(layerIndex) {
                         if (layerIndex < _this.layers.length) {
@@ -247,6 +350,9 @@ export default function (obj) {
                     _this.width = data.width;
                     _this.height = data.height;
                     painter = canvasRender(_this._refs.mycanvas.value, _this.width, _this.height);
+
+                    // 调整辅助画布大小
+                    helpImg.painter = canvasRender(helpImg.canvas, _this.width, _this.height);
 
                     // 一个个图层调整好
                     (function doit(layerIndex) {

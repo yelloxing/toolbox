@@ -14,7 +14,7 @@ export default function (canvas, width, height) {
 
         // https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
         willReadFrequently: true
-    }, true);
+    });
 
     var regions = {},//区域映射表
         rgb = [0, 0, 0],//区域标识色彩,rgb(0,0,0)表示空白区域
@@ -29,11 +29,11 @@ export default function (canvas, width, height) {
             if (arguments.length === 1) {
                 if (typeof arguments[0] !== "object") return drawPainter.config([arguments[0]]);
                 for (var key in arguments[0]) {
-                    if (['fillStyle', 'strokeStyle'].indexOf(key) < 0) regionPainter.config(key, arguments[0][key]);
+                    if (['fillStyle', 'strokeStyle', 'shadowBlur', 'shadowColor'].indexOf(key) < 0) regionPainter.config(key, arguments[0][key]);
                     drawPainter.config(key, arguments[0][key]);
                 }
             } else if (arguments.length === 2) {
-                if (['fillStyle', 'strokeStyle'].indexOf(key) < 0) regionPainter.config(arguments[0], arguments[1]);
+                if (['fillStyle', 'strokeStyle', 'shadowBlur', 'shadowColor'].indexOf(key) < 0) regionPainter.config(arguments[0], arguments[1]);
                 drawPainter.config(arguments[0], arguments[1]);
             }
             return instance;
@@ -107,9 +107,9 @@ export default function (canvas, width, height) {
             // 特殊的过滤掉
             else if (['config'].indexOf(key) < 0) {
                 instance[key] = function () {
-                    drawPainter[key].apply(drawPainter, arguments);
                     if (drawRegion) regionPainter[key].apply(regionPainter, arguments);
-                    return instance;
+                    var result = drawPainter[key].apply(drawPainter, arguments);
+                    return result.__only__painter__ ? instance : result;
                 };
 
             }

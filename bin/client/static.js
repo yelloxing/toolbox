@@ -13,3 +13,18 @@ ws.addEventListener('message', function (event) {
     window.location.reload(true);
 
 });
+
+/**
+ * 热更新 HMR(hot module replacement) 相关
+ */
+
+function createHotContext(ownerPath) {
+
+    var hot = {
+        accept: function (deps, callback) {
+
+        }
+    };
+
+    return hot;
+}

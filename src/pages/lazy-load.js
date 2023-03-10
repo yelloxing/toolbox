@@ -63,5 +63,10 @@ export default {
     // 应用中心
     "application": function () {
         return import('./application/index.js')
+    },
+
+    // 可视化图表
+    "echarts": function () {
+        return import('./echarts/index.js')
     }
 };

@@ -251,7 +251,7 @@ Promise.all = function (iterable) {
 
     return new Promise(function (resolve, reject) {
 
-        if (!Array.lisArray(iterable)) {
+        if (!Array.isArray(iterable)) {
             return reject(new TypeError('undefined is not iterable (cannot read property Symbol(Symbol.iterator))'));
         }
 
@@ -296,7 +296,7 @@ Promise.allSettled = function (iterable) {
 
     return new Promise(function (resolve, reject) {
 
-        if (!Array.lisArray(iterable)) {
+        if (!Array.isArray(iterable)) {
             return reject(new TypeError('undefined is not iterable (cannot read property Symbol(Symbol.iterator))'));
         }
 
@@ -342,7 +342,7 @@ Promise.any = function (iterable) {
 
     return new Promise(function (resolve, reject) {
 
-        if (!Array.lisArray(iterable)) {
+        if (!Array.isArray(iterable)) {
             return reject(new TypeError('undefined is not iterable (cannot read property Symbol(Symbol.iterator))'));
         }
 
@@ -389,7 +389,7 @@ Promise.race = function (iterable) {
 
     return new Promise(function (resolve, reject) {
 
-        if (!Array.lisArray(iterable)) {
+        if (!Array.isArray(iterable)) {
             return reject(new TypeError('undefined is not iterable (cannot read property Symbol(Symbol.iterator))'));
         }
 

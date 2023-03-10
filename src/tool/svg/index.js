@@ -1,6 +1,7 @@
-import { initText, initCircle, initPath, initRect } from "./config.js";
+import { initText, initCircle, initPath, initRect, initArc } from "./config.js";
 import isString from "../type/isString.js";
 import { toNode, setAttribute, getAttribute, full, fill, stroke } from "./tool.js";
+import rotate from "../transform/rotate";
 
 export default function (svg) {
 
@@ -20,6 +21,10 @@ export default function (svg) {
         "font-size": 16,
         "font-family": "sans-serif",
 
+        // arc二端闭合方式['butt':直线闭合,'round':圆帽闭合]
+        "arc-start-cap": "butt",
+        "arc-end-cap": "butt",
+
         // 虚线设置
         "lineDash": []
 
@@ -29,7 +34,7 @@ export default function (svg) {
     var useEl;
 
     // 路径(和canvas2D的类似)
-    var path = "";
+    var path = "", currentPosition = [];
 
     // 画笔
     var enhancePainter = {
@@ -142,6 +147,23 @@ export default function (svg) {
             return enhancePainter;
         },
 
+        // 弧
+        fillArc: function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(useEl, config, cx, cy, r1, r2, beginDeg, deg);
+            fill(useEl, config);
+            return enhancePainter;
+        },
+        strokeArc: function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(useEl, config, cx, cy, r1, r2, beginDeg, deg);
+            stroke(useEl, config);
+            return enhancePainter;
+        },
+        fullArc: function (cx, cy, r1, r2, beginDeg, deg) {
+            initArc(useEl, config, cx, cy, r1, r2, beginDeg, deg);
+            full(useEl, config);
+            return enhancePainter;
+        },
+
         // 圆形
         fillCircle: function (cx, cy, r) {
             initCircle(useEl, cx, cy, r);
@@ -178,6 +200,8 @@ export default function (svg) {
 
         // 路径
         beginPath: function () {
+            currentPosition = [];
+
             path = "";
             return enhancePainter;
         },
@@ -186,10 +210,14 @@ export default function (svg) {
             return enhancePainter;
         },
         moveTo: function (x, y) {
+            currentPosition = [x, y];
+
             path += "M" + x + " " + y;
             return enhancePainter;
         },
         lineTo: function (x, y) {
+            currentPosition = [x, y];
+
             path += (path == "" ? "M" : "L") + x + " " + y;
             return enhancePainter;
         },
@@ -206,6 +234,23 @@ export default function (svg) {
         full: function () {
             initPath(useEl, path);
             full(useEl, config);
+            return enhancePainter;
+        },
+
+        arc: function (x, y, r, beginDeg, deg) {
+            var begPosition = rotate(x, y, beginDeg, x + r, y);
+            var endPosition = rotate(x, y, beginDeg + deg, x + r, y);
+            beginDeg = beginDeg / Math.PI * 180;
+            deg = deg / Math.PI * 180;
+            // 如果当前没有路径，说明是开始的，就移动到正确位置
+            if (path == '') {
+                path += "M" + begPosition[0] + "," + begPosition[1];
+            }
+            // 如果当前有路径，位置不正确，应该画到正确位置（和canvas保持一致）
+            else if (begPosition[0] != currentPosition[0] || begPosition[1] != currentPosition[1]) {
+                path += "L" + begPosition[0] + "," + begPosition[1];
+            }
+            path += "A" + r + "," + r + " 0 " + ((deg > 180 || deg < -180) ? 1 : 0) + "," + (deg > 0 ? 1 : 0) + " " + endPosition[0] + "," + endPosition[1];
             return enhancePainter;
         },
 
