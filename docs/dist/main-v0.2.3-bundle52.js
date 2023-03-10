@@ -507,17 +507,15 @@ window.__pkg__bundleSrc__['279']=function(){
     __pkg__scope_args__=window.__pkg__getBundle('280');
 var setAttribute=__pkg__scope_args__.setAttribute;
 
-__pkg__scope_args__=window.__pkg__getBundle('281');
+__pkg__scope_args__=window.__pkg__getBundle('282');
 var setStyle =__pkg__scope_args__.default;
 
-__pkg__scope_args__=window.__pkg__getBundle('282');
+__pkg__scope_args__=window.__pkg__getBundle('283');
 var isNumber =__pkg__scope_args__.default;
 
-__pkg__scope_args__=window.__pkg__getBundle('283');
+__pkg__scope_args__=window.__pkg__getBundle('284');
 var arc =__pkg__scope_args__.default;
 
-
-__pkg__scope_bundle__.XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
 
 // 文字统一设置方法
 __pkg__scope_bundle__.initText = function (el, config, x, y, deg) {
@@ -652,7 +650,7 @@ __pkg__scope_bundle__.initArc = function (el, config, cx, cy, r1, r2, beginDeg, 
 window.__pkg__bundleSrc__['280']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_args__=window.__pkg__getBundle('279');
+    __pkg__scope_args__=window.__pkg__getBundle('281');
 var XLINK_ATTRIBUTE=__pkg__scope_args__.XLINK_ATTRIBUTE;
 
 
@@ -662,7 +660,7 @@ __pkg__scope_bundle__.toNode=function(tagname) {
 };
 
 // 设置属性
-__pkg__scope_bundle__.setAttribute=function(el, key, value) {
+var _setAttribute = function (el, key, value) {
 
     // 需要使用xlink命名空间的xml属性
     if (XLINK_ATTRIBUTE.indexOf(key) > -1) {
@@ -674,6 +672,7 @@ __pkg__scope_bundle__.setAttribute=function(el, key, value) {
         el.setAttribute(key, value);
     }
 };
+__pkg__scope_bundle__.setAttribute = _setAttribute;
 
 // 获取属性
 __pkg__scope_bundle__.getAttribute=function(el, key) {
@@ -682,20 +681,31 @@ __pkg__scope_bundle__.getAttribute=function(el, key) {
 };
 
 __pkg__scope_bundle__.full=function(el, config) {
-    setAttribute(el, "stroke", config.strokeStyle);
-    setAttribute(el, "fill", config.fillStyle);
-    setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
+    _setAttribute(el, "stroke", config.strokeStyle);
+    _setAttribute(el, "fill", config.fillStyle);
+    _setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
 };
 
 __pkg__scope_bundle__.fill=function(el, config) {
-    setAttribute(el, "fill", config.fillStyle);
+    _setAttribute(el, "fill", config.fillStyle);
 };
 
 __pkg__scope_bundle__.stroke=function(el, config) {
-    setAttribute(el, "stroke", config.strokeStyle);
-    setAttribute(el, "fill", "none");
-    setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
+    _setAttribute(el, "stroke", config.strokeStyle);
+    _setAttribute(el, "fill", "none");
+    _setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
 };
+
+    return __pkg__scope_bundle__;
+}
+
+/*************************** [bundle] ****************************/
+// Original file:./src/tool/svg/dictionary.js
+/*****************************************************************/
+window.__pkg__bundleSrc__['281']=function(){
+    var __pkg__scope_bundle__={};
+    var __pkg__scope_args__;
+    __pkg__scope_bundle__.XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
 
     return __pkg__scope_bundle__;
 }
@@ -703,7 +713,7 @@ __pkg__scope_bundle__.stroke=function(el, config) {
 /*************************** [bundle] ****************************/
 // Original file:./src/tool/xhtml/setStyle.js
 /*****************************************************************/
-window.__pkg__bundleSrc__['281']=function(){
+window.__pkg__bundleSrc__['282']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
     // 修改样式
@@ -719,7 +729,7 @@ __pkg__scope_bundle__.default= function (el, styles) {
 /*************************** [bundle] ****************************/
 // Original file:./src/tool/type/isNumber.js
 /*****************************************************************/
-window.__pkg__bundleSrc__['282']=function(){
+window.__pkg__bundleSrc__['283']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
     __pkg__scope_args__=window.__pkg__getBundle('4');
@@ -746,7 +756,7 @@ __pkg__scope_bundle__.default= function (value) {
 /*************************** [bundle] ****************************/
 // Original file:./src/tool/canvas/arc.js
 /*****************************************************************/
-window.__pkg__bundleSrc__['283']=function(){
+window.__pkg__bundleSrc__['284']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
     

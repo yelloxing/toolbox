@@ -155,7 +155,7 @@ window.__pkg__bundleSrc__['65']=function(){
 
     // 快速开始
     begin: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.2-bundle13.js','66')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.3-bundle13.js','66')
     }
 
 };

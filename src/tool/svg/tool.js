@@ -1,4 +1,4 @@
-import { XLINK_ATTRIBUTE } from "./config.js";
+import { XLINK_ATTRIBUTE } from "./dictionary.js";
 
 // 新建节点
 export function toNode(tagname) {
@@ -6,7 +6,7 @@ export function toNode(tagname) {
 };
 
 // 设置属性
-export function setAttribute(el, key, value) {
+var _setAttribute = function (el, key, value) {
 
     // 需要使用xlink命名空间的xml属性
     if (XLINK_ATTRIBUTE.indexOf(key) > -1) {
@@ -18,6 +18,7 @@ export function setAttribute(el, key, value) {
         el.setAttribute(key, value);
     }
 };
+export var setAttribute = _setAttribute;
 
 // 获取属性
 export function getAttribute(el, key) {
@@ -26,17 +27,17 @@ export function getAttribute(el, key) {
 };
 
 export function full(el, config) {
-    setAttribute(el, "stroke", config.strokeStyle);
-    setAttribute(el, "fill", config.fillStyle);
-    setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
+    _setAttribute(el, "stroke", config.strokeStyle);
+    _setAttribute(el, "fill", config.fillStyle);
+    _setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
 };
 
 export function fill(el, config) {
-    setAttribute(el, "fill", config.fillStyle);
+    _setAttribute(el, "fill", config.fillStyle);
 };
 
 export function stroke(el, config) {
-    setAttribute(el, "stroke", config.strokeStyle);
-    setAttribute(el, "fill", "none");
-    setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
+    _setAttribute(el, "stroke", config.strokeStyle);
+    _setAttribute(el, "fill", "none");
+    _setAttribute(el, "stroke-dasharray", config.lineDash.join(','));
 };

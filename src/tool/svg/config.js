@@ -3,8 +3,6 @@ import setStyle from "../xhtml/setStyle.js";
 import isNumber from '../type/isNumber.js';
 import arc from '../canvas/arc.js';
 
-export var XLINK_ATTRIBUTE = ["href", "title", "show", "type", "role", "actuate"];
-
 // 文字统一设置方法
 export var initText = function (el, config, x, y, deg) {
     if (el.nodeName.toLowerCase() !== 'text') throw new Error('Need a <text> !');
