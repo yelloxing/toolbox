@@ -21,13 +21,15 @@ let config = require('./config')(parsed.config[0]);
 
 let index = 0;
 let server = http.createServer(function (request, response) {
-    try {
-        log("[" + index++ + "]" + request.url);
+    let url = decodeURIComponent(request.url);
 
-        request.url = request.url.split("?")[0];
+    try {
+        log("[" + index++ + "]" + url);
+
+        url = url.split("?")[0];
 
         // 如果是入口html
-        if (request.url == '/' || request.url == '/index.html') {
+        if (url == '/' || url == '/index.html') {
             let template = fs.readFileSync(fullPath('./index.html', process.cwd()));
 
             response.writeHead(200, {
@@ -46,7 +48,7 @@ let server = http.createServer(function (request, response) {
         // 其余就是普通文件
         else {
 
-            let result = config.$readFileSync("." + request.url);
+            let result = config.$readFileSync("." + url);
             response.writeHead(200, {
                 'content-type': result.type + ";charset=utf-8"
             });
@@ -60,7 +62,7 @@ let server = http.createServer(function (request, response) {
         // 打印错误并返回404页面
         error(e);
 
-        let filePath = fullPath(request.url.replace(/^\//, ""), process.cwd());
+        let filePath = fullPath(url.replace(/^\//, ""), process.cwd());
 
         response.writeHead(404, {
             'content-type': "text/html;charset=utf-8"
