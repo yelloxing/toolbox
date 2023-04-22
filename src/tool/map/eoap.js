@@ -60,7 +60,7 @@ export default function (config) {
         p = _rotateX((90 - config.center[1]) / 180 * Math.PI, p[0], p[1], p[2]);
 
         return [
-            -p[0],//加-号是因为浏览器坐标和地图不一样
+            -p[0], // 加-号是因为浏览器坐标和地图不一样
             p[1],
             p[2]
         ];

@@ -30,8 +30,6 @@ export default function (t) {
             }
 
             // 由于js浮点运算不准确，我们对于越界的情况进行边界值返回
-            // if (i == -1 || i >= HS.h.length)
-            //     throw new Error('Coordinate crossing!');
 
             if (i < 0) {
                 return HS.h[0](HS.x[0]);

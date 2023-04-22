@@ -68,5 +68,15 @@ export default {
     // 可视化图表
     "echarts": function () {
         return import('./echarts/index.js')
+    },
+
+    // 金山打字
+    "type-practice": function () {
+        return import('./type-practice/index.js')
+    },
+
+    // Excel 表格
+    "excel": function () {
+        return import('./excel/index.js')
     }
 };

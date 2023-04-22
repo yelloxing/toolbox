@@ -40,7 +40,7 @@ let server = http.createServer(function (request, response) {
                     .replace(
                         '<!-- built files will be auto injected -->',
                         globalScript + '<script defer="defer" src="' + config.entry + '" type="module"></script>' +
-                        '<script defer="defer" src="./bin/client/static.js"></script>'
+                        (config.devServer.hot ? '<script defer="defer" src="./bin/client/static.js"></script>' : '')
                     )
             );
         }
@@ -76,5 +76,8 @@ let server = http.createServer(function (request, response) {
 server.listen(config.devServer.port);
 log('Server running on port:' + config.devServer.port);
 
-// 启动ws服务器
-require('./WebSocket/index')();
+if (config.devServer.hot) {
+
+    // 启动ws服务器
+    require('./WebSocket/index')();
+}

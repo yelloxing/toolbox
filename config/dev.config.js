@@ -5,7 +5,8 @@ config.mode = "development";
 
 // 服务器配置
 config.devServer = {
-    port: 20000
+    port: 20000,
+    hot: false
 };
 
 module.exports = config;

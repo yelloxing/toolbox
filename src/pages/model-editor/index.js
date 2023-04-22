@@ -14,8 +14,11 @@ import fragmentShader from './shader-fragment.c';
 
 export default function (obj) {
 
-    // 记录着当前的模型数据
-    var modelValue = mainView();
+    /**
+     * 内部结构
+     * （会随时根据实际情况调整，切勿直接导出）
+     */
+    var modelValue = []; // 记录着当前的模型几何绘制
 
     var doDraw, stopDoResize;
 
@@ -33,29 +36,12 @@ export default function (obj) {
             height: obj.ref(0)
         },
         mounted: function () {
-
-            // 启动画布监听
-            var _this = this;
-            var el = this._refs.mainViewRoot.value;
-
-            // 绘制刻度尺的方法
-            var drawAxis = this.renderAxisView();
-
-            stopDoResize = doResize(el, function () {
-                _this.width = el.clientWidth;
-                _this.height = el.clientHeight;
-
-                setTimeout(function () {
-                    _this.updateView(drawAxis);
-                });
-
-            });
+            this.resetEditor();
         },
         beforeDestory: function () {
 
             // 取消对画布大小改变的监听
             if (stopDoResize) stopDoResize();
-
         },
 
         beforeUnfocus: function () {
@@ -74,17 +60,71 @@ export default function (obj) {
 
             // 导入本地文件
             inputLocalFile: function (event) {
-                alert('未完成');
+                var i, files = event.target.files;
+
+                var unsupportFile = "";
+                for (i = 0; i < files.length; i++) {
+
+                    // GLTF文件
+                    if (/\.gltf$/.test(files[i].name)) {
+                        (function (file) {
+                            var reader = new FileReader();
+                            reader.onload = function () {
+
+                                console.log(reader.result);
+
+                                doDraw();
+                            };
+
+                            reader.readAsText(file, "utf-8");
+                        })(files[i]);
+                    }
+
+                    // 否则就是还没有支持的
+                    else {
+                        unsupportFile += files[i].name + ",";
+                    }
+                }
+
+                // 如果存在还不支持的，提示一下
+                if (unsupportFile.length > 0) {
+                    alert('部分文件由于时间问题，目前不支持打开其格式：【 ' + (unsupportFile.replace(/\,$/, '')) + '】');
+                }
             },
 
             // 导出
             exportFile: function () {
-                alert('未完成');
+
+                // 会提供一个界面，用户可以选择具体的导出格式
+                alert('导出功能未完成');
             },
 
-            //  新建
-            resetEditor: function () {
-                alert('未完成');
+            // 新建
+            resetEditor: function (event) {
+                modelValue = mainView();
+
+                if (stopDoResize) stopDoResize();
+
+                // 启动画布监听
+                var _this = this;
+                var el = this._refs.mainViewRoot.value;
+
+                // 绘制刻度尺的方法
+                var drawAxis = this.renderAxisView();
+
+                stopDoResize = doResize(el, function () {
+                    _this.width = el.clientWidth;
+                    _this.height = el.clientHeight;
+
+                    setTimeout(function () {
+                        _this.updateView(drawAxis);
+                    });
+
+                });
+
+                if (event) {
+                    alert("新建成功！");
+                }
             },
 
             // 根据模型数据进行绘制

@@ -35,10 +35,22 @@
         title="可以把scss变成css，目前只支持注释和嵌套语法" tag="scss" ui-on:dblclick="goto" ui-right-menu:app>
         scss转css
     </li>
+    <li class="link" ui-bind:select="select=='echarts'?'yes':'no'" ui-on:click.stop="doSelect" title="一些数据可视化交互图表"
+        tag="echarts" ui-on:dblclick="goto" ui-right-menu:app>
+        可视化图表
+    </li>
     <li class="link" ui-bind:select="select=='model-editor'?'yes':'no'" ui-on:click.stop="doSelect"
         title="可以编辑3D模型，支持格式包括：stl、obj、fbx、mtl、ply、gltf、mod等" tag="model-editor" ui-on:dblclick="goto"
         ui-right-menu:app>
         3D模型编辑器
+    </li>
+    <li class="link" ui-bind:select="select=='type-practice'?'yes':'no'" ui-on:click.stop="doSelect" title="一个打字练习软件"
+        tag="type-practice" ui-on:dblclick="goto" ui-right-menu:app>
+        金山打字
+    </li>
+    <li class="link" ui-bind:select="select=='excel'?'yes':'no'" ui-on:click.stop="doSelect" title="Excel 編輯器"
+        tag="excel" ui-on:dblclick="goto" ui-right-menu:app>
+        Excel 表格
     </li>
 </ul>
 <div class="taskline" ui-right-menu:desktop-line>
