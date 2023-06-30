@@ -44,8 +44,6 @@ export default function (navRootEl, editorRootEl, fileName, fileType, fileConten
             content: fileContent
         };
 
-        console.log(fileType)
-
         if (['html', 'svg', 'xml', 'vue'].indexOf(fileType) > -1) {
             options.shader = ['html']
         } else if (['css', 'scss', 'sass'].indexOf(fileType) > -1) {

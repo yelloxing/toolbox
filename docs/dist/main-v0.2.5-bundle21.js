@@ -552,8 +552,6 @@ __pkg__scope_bundle__.default= function (navRootEl, editorRootEl, fileName, file
             content: fileContent
         };
 
-        console.log(fileType)
-
         if (['html', 'svg', 'xml', 'vue'].indexOf(fileType) > -1) {
             options.shader = ['html']
         } else if (['css', 'scss', 'sass'].indexOf(fileType) > -1) {

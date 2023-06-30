@@ -18,12 +18,12 @@ export default function (svg) {
         "textBaseline": "middle",
 
         // 文字设置
-        "font-size": 16,
-        "font-family": "sans-serif",
+        "fontSize": 16,
+        "fontFamily": "sans-serif",
 
         // arc二端闭合方式['butt':直线闭合,'round':圆帽闭合]
-        "arc-start-cap": "butt",
-        "arc-end-cap": "butt",
+        "arcStartCap": "butt",
+        "arcEndCap": "butt",
 
         // 虚线设置
         "lineDash": []
@@ -238,10 +238,8 @@ export default function (svg) {
         },
 
         arc: function (x, y, r, beginDeg, deg) {
-            var begPosition = rotate(x, y, beginDeg, x + r, y);
-            var endPosition = rotate(x, y, beginDeg + deg, x + r, y);
-            beginDeg = beginDeg / Math.PI * 180;
-            deg = deg / Math.PI * 180;
+            var begPosition = rotate(x, y, beginDeg / 180 * Math.PI, x + r, y);
+            var endPosition = rotate(x, y, (beginDeg + deg) / 180 * Math.PI, x + r, y);
             // 如果当前没有路径，说明是开始的，就移动到正确位置
             if (path == '') {
                 path += "M" + begPosition[0] + "," + begPosition[1];

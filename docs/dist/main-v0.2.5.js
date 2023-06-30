@@ -179,7 +179,7 @@ lazyLoad[_platformName + "Pages"]().then(function (data1) {
 
                         // 否则就是取消操作
                         else {
-                            // todo
+                            reject("");
                         };
                     };
 
@@ -2101,17 +2101,17 @@ window.__pkg__bundleSrc__['26']=function(){
 
     // 系统右键
     system: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle1.js','27')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle1.js','27')
     },
 
     // 桌面右键
     "desktop-line": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle2.js','28')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle2.js','28')
     },
 
     // 应用右键
     "app": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle3.js','29')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle3.js','29')
     }
 
 };
@@ -2239,22 +2239,22 @@ window.__pkg__bundleSrc__['34']=function(){
 
     // PC
     "pcDesktop": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle4.js','35')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle4.js','35')
     },
 
     // Mobile
     "mobileDesktop": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle5.js','36')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle5.js','36')
     },
 
     // PC应用列表
     "pcPages": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle6.js','37')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle6.js','37')
     },
 
     // Mobile应用列表
     "mobilePages": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle7.js','38')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle7.js','38')
     }
 
 };
@@ -2272,28 +2272,28 @@ window.__pkg__bundleSrc__['39']=function(){
 
     // 调试
     debugger: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle8.js','40')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle8.js','40')
     },
 
     // 颜色选择
     "color-picker": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle9.js','41')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle9.js','41')
     },
 
     // 接口文档
     api: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle10.js','42')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle10.js','42')
     },
 
     // 项目介绍
     what: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle11.js','43')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle11.js','43')
     },
 
 
     // 截图工具
     "snipping-tool": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle12.js','44')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle12.js','44')
     }
 
 };

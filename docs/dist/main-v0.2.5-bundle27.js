@@ -261,47 +261,47 @@ window.__pkg__bundleSrc__['221']=function(){
 
     // 简单的饼图
     "pie-simple": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle46.js','222')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle46.js','222')
     },
 
     // 多X轴折线图
     "line-multiple-x-axis": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle47.js','223')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle47.js','223')
     },
 
     // 极坐标下的柱状图
     "bar-polar-real-estate": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle48.js','224')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle48.js','224')
     },
 
     // 渐变气泡图
     "scatter-bubble-gradient": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle49.js','225')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle49.js','225')
     },
 
     // 基础K线图
     "candlestick-simple": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle50.js','226')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle50.js','226')
     },
 
     // 气压表
     "gauge-barometer": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle51.js','227')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle51.js','227')
     },
 
     // 旭日图使用视觉编码
     "sunburst-visualMap": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle52.js','228')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle52.js','228')
     },
 
     // 基础平行坐标
     "parallel-simple": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle53.js','229')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle53.js','229')
     },
 
     // 金额波浪球
     "money-schedule": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle54.js','230')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle54.js','230')
     }
 };
 

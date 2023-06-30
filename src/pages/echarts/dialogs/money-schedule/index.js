@@ -4,7 +4,7 @@ import svgRender from '../../../../tool/svg/index';
 import animation from '../../../../tool/animation';
 import rotate from '../../../../tool/transform/rotate';
 
-var stop;
+var stop = function () { };
 export default function (obj, props) {
 
     return {
@@ -21,7 +21,7 @@ export default function (obj, props) {
             // 进度条
             var rate = 0.73;
 
-            painter.appendEl("circle")
+            painter
 
                 // 绘制三个背景圆
                 .config({
@@ -41,26 +41,26 @@ export default function (obj, props) {
 
             // 绘制三行文字
             painter.config({
-                'font-size': 40,
+                'fontSize': 40,
                 'fillStyle': '#272727',
                 'textAlign': 'center'
             })
                 .appendEl("text").fillText('￥100,000', 250, 210)
                 .config({
-                    'font-size': 30,
+                    'fontSize': 30,
                     'fillStyle': '#595757'
                 })
                 .appendEl("text").fillText('可借', 250, 160)
                 .config({
-                    'font-size': 24,
+                    'fontSize': 24,
                     'fillStyle': '#a4a1a1'
                 })
                 .appendEl("text").fillText('总额度150,000', 250, 260);
 
             // 配置进度条
             arcNode.config({
-                'arc-start-cap': 'round',
-                'arc-end-cap': 'round',
+                'arcStartCap': 'round',
+                'arcEndCap': 'round',
                 'fillStyle': '#ff7f08'
             });
 
@@ -68,7 +68,7 @@ export default function (obj, props) {
             animation(function (deep) {
 
                 // 根据当前进度deep更新弧形进度
-                arcNode.fillArc(250, 250, 180, 200, -Math.PI / 2, -Math.PI * 2 * (1 - rate) * deep);
+                arcNode.fillArc(250, 250, 180, 200, -90, -360 * (1 - rate) * deep);
 
                 // 初始化wave
                 _this.fullWave(rate * deep, deep, innerWave, outerWave);
@@ -150,7 +150,7 @@ export default function (obj, props) {
                     .moveTo(beginPoint[0], beginPoint[1])
 
                     // 绘制半圆部分
-                    .arc(250, 250, 160, (0.5 - rate) * Math.PI, 2 * rate * Math.PI)
+                    .arc(250, 250, 160, (0.5 - rate) * 180, 2 * rate * 180)
 
                     // 绘制波浪部分
                     .bezierCurveTo(

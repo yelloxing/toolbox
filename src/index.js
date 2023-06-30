@@ -94,7 +94,7 @@ lazyLoad[_platformName + "Pages"]().then(function (data1) {
 
                         // 否则就是取消操作
                         else {
-                            // todo
+                            reject("");
                         };
                     };
 

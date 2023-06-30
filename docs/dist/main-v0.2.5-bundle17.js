@@ -36,11 +36,14 @@ var remove =__pkg__scope_args__.default;
 __pkg__scope_args__=window.__pkg__getBundle('31');
 var isString =__pkg__scope_args__.default;
 
+__pkg__scope_args__=window.__pkg__getBundle('97');
+var mousePosition =__pkg__scope_args__.default;
+
 
 __pkg__scope_bundle__.default= function (obj) {
     var i;
 
-    var wins = {}, painter, layerRootEl;
+    var wins = {}, painter, cursorPainter, layerRootEl;
 
     // 记录鼠标是否按下
     var mouseIsDown = false;
@@ -53,6 +56,9 @@ __pkg__scope_bundle__.default= function (obj) {
 
     // 标记当前窗口是否处于聚焦状态
     var isFocus = false;
+
+    // 标记当前无弹框
+    var noDialog = true;
 
     return {
         name: "image-editor",
@@ -109,6 +115,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
             // 调整辅助画布大小
             helpImg.painter = canvasRender(helpImg.canvas, this.width, this.height);
+            cursorPainter = canvasRender(this._refs.mycursor.value, this.width, this.height);
 
             Promise.all([
                 this.$openWin(lazyWins.layer),
@@ -127,7 +134,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
             // 启动键盘监听
             getKeyCode(function (keyCode, event) {
-                if (isFocus) {
+                if (isFocus && noDialog) {
 
                     // 移动
                     if (_this.activeTool == 'move') {
@@ -145,10 +152,10 @@ __pkg__scope_bundle__.default= function (obj) {
                     // 抓手工具
                     else if (_this.activeTool == 'drap') {
 
-                        if (keyCode == 'up') _this.top += _this.drap_size;
-                        else if (keyCode == 'down') _this.top -= _this.drap_size;
-                        else if (keyCode == 'left') _this.left += _this.drap_size;
-                        else if (keyCode == 'right') _this.left -= _this.drap_size;
+                        if (keyCode == 'up') _this.top -= _this.drap_size;
+                        else if (keyCode == 'down') _this.top += _this.drap_size;
+                        else if (keyCode == 'left') _this.left -= _this.drap_size;
+                        else if (keyCode == 'right') _this.left += _this.drap_size;
 
                     }
 
@@ -156,25 +163,97 @@ __pkg__scope_bundle__.default= function (obj) {
             });
 
             // 鼠标按下
-            bind(_this._refs.mycanvas.value, 'mousedown', function () {
+            bind(_this._refs.editorView.value, 'mousedown', function (event) {
                 mouseIsDown = true;
+                var position = mousePosition(_this._refs.mycanvas.value, event);
+
+                // 橡皮擦
+                if (_this.activeTool == 'eraser') {
+
+                    // 先擦除画布
+                    painter.clearRect(0, 0, _this.width, _this.height);
+
+                    for (i = _this.layers.length - 1; i >= 0; i--) {
+
+                        // 被选中的需要修改记录的canvas内容
+                        if (_this.layers[i].rootEl.getAttribute('active') == 'yes') {
+                            _this.layers[i].painter.clearRect(position.x - _this.eraser_size * 0.5, position.y - _this.eraser_size * 0.5, _this.eraser_size, _this.eraser_size);
+                        }
+
+                        painter.drawImage(_this.layers[i].canvas);
+                    }
+                }
+
             });
 
             // 鼠标移动
-            bind(document.body, 'mousemove', function () {
-                if (mouseIsDown) {
+            bind(document.body, 'mousemove', function (event) {
+                cursorPainter.clearRect(0, 0, _this.width, _this.height);
 
-                    // 移动
-                    if (_this.activeTool == 'move') {
+                var position = mousePosition(_this._refs.mycanvas.value, event);
+
+                cursorPainter.config({
+                    fillStyle: "#f00",
+                    strokeStyle: "white"
+                });
+
+                // 移动
+                if (_this.activeTool == 'move') {
+                    if (mouseIsDown) {
 
                     }
 
-                    // 抓手工具
-                    else if (_this.activeTool == 'drap') {
-
-                    }
-
+                    // 鼠标
+                    cursorPainter.beginPath()
+                        .moveTo(position.x, position.y)
+                        .lineTo(position.x + 20, position.y + 10)
+                        .lineTo(position.x + 10, position.y + 10)
+                        .lineTo(position.x + 10, position.y + 20)
+                        .closePath().full()
                 }
+
+                // 抓手工具
+                else if (_this.activeTool == 'drap') {
+                    if (mouseIsDown) {
+
+                    }
+                }
+
+                // 橡皮擦
+                else if (_this.activeTool == 'eraser') {
+                    if (mouseIsDown) {
+                        // 先擦除画布
+                        painter.clearRect(0, 0, _this.width, _this.height);
+
+                        for (i = _this.layers.length - 1; i >= 0; i--) {
+
+                            // 被选中的需要修改记录的canvas内容
+                            if (_this.layers[i].rootEl.getAttribute('active') == 'yes') {
+                                _this.layers[i].painter.clearRect(position.x - _this.eraser_size * 0.5, position.y - _this.eraser_size * 0.5, _this.eraser_size, _this.eraser_size);
+                            }
+
+                            painter.drawImage(_this.layers[i].canvas);
+                        }
+                    }
+
+                    // 鼠标
+                    cursorPainter.fullRect(position.x - _this.eraser_size * 0.5, position.y - _this.eraser_size * 0.5, _this.eraser_size, _this.eraser_size);
+                }
+
+                // 背景橡皮擦
+                else if (_this.activeTool == 'eraser-bg') {
+                    if (mouseIsDown) {
+
+                    }
+
+                    // 鼠标
+                    cursorPainter.fullRect(position.x - _this.eraser_bg_size * 0.5, position.y - _this.eraser_bg_size * 0.5, _this.eraser_bg_size, _this.eraser_bg_size)
+                        .config({
+                            strokeStyle: "#f00"
+                        }).beginPath().moveTo(position.x - 10 - _this.eraser_bg_size * 0.5, position.y - 10 - _this.eraser_bg_size * 0.5).lineTo(position.x - _this.eraser_bg_size * 0.5, position.y - _this.eraser_bg_size * 0.5).stroke()
+                        .beginPath().moveTo(position.x - 10 - _this.eraser_bg_size * 0.5, position.y - _this.eraser_bg_size * 0.5).lineTo(position.x - _this.eraser_bg_size * 0.5, position.y - 10 - _this.eraser_bg_size * 0.5).stroke()
+                }
+
             });
 
             // 鼠标松开
@@ -232,7 +311,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
             // 移动内容
             doMove: function (dx, dy) {
-                // 先擦出画布
+                // 先擦除画布
                 painter.clearRect(0, 0, this.width, this.height);
 
                 for (i = this.layers.length - 1; i >= 0; i--) {
@@ -299,6 +378,7 @@ __pkg__scope_bundle__.default= function (obj) {
             // 图像 / 画布大小
             editCanvasSize: function () {
                 var _this = this;
+                noDialog = false;
 
                 this.$openDialog(lazyDialogs.size, {
                     title: "画布大小",
@@ -336,6 +416,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
                     // 调整辅助画布大小
                     helpImg.painter = canvasRender(helpImg.canvas, _this.width, _this.height);
+                    cursorPainter = canvasRender(_this._refs.mycursor.value, _this.width, _this.height);
 
                     // 一个个图层调整好
                     (function doit(layerIndex) {
@@ -359,12 +440,15 @@ __pkg__scope_bundle__.default= function (obj) {
                             doit(layerIndex + 1);
                         }
                     })(0);
+                }).finally(function () {
+                    noDialog = true;
                 });
             },
 
             // 图像 / 图像大小
             editImageSize: function () {
                 var _this = this;
+                noDialog = false;
 
                 this.$openDialog(lazyDialogs.size, {
                     title: "图像大小",
@@ -379,6 +463,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
                     // 调整辅助画布大小
                     helpImg.painter = canvasRender(helpImg.canvas, _this.width, _this.height);
+                    cursorPainter = canvasRender(_this._refs.mycursor.value, _this.width, _this.height);
 
                     // 一个个图层调整好
                     (function doit(layerIndex) {
@@ -401,6 +486,8 @@ __pkg__scope_bundle__.default= function (obj) {
                         }
                     })(0);
 
+                }).finally(function () {
+                    noDialog = true;
                 });
             },
 
@@ -487,6 +574,8 @@ __pkg__scope_bundle__.default= function (obj) {
                             painter = canvasRender(_this._refs.mycanvas.value, _this.width, _this.height);
                             painter.clearRect(0, 0, image.width, image.height);
 
+                            cursorPainter = canvasRender(_this._refs.mycursor.value, _this.width, _this.height);
+
                         }
                         _this.appendLayer(newLayerCanvas, file.name);
                     }
@@ -497,6 +586,7 @@ __pkg__scope_bundle__.default= function (obj) {
 
             // 保存图片
             saveImage: function () {
+                noDialog = false;
                 this.$openDialog(lazyDialogs.save, {
                     painter: painter,
                     name: this.layers.length > 1 ? this.layers[1].textEl.innerText : "未命名",
@@ -510,6 +600,8 @@ __pkg__scope_bundle__.default= function (obj) {
                     btn.download = data.name + "." + data.format[1];
                     btn.click();
 
+                }).finally(function () {
+                    noDialog = true;
                 });
             }
         }
@@ -525,7 +617,7 @@ __pkg__scope_bundle__.default= function (obj) {
 window.__pkg__bundleSrc__['166']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,4,66,105]},{"type":"tag","name":"div","attrs":{"class":"no-view"},"childNodes":[2,3]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"imgFile1","flag":"import","ui-on:change":"openImage","accept":"image/*"},"childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"imgFile2","flag":"append","ui-on:change":"openImage","accept":"image/*"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"menu","ui-dragdrop:desktop":""},"childNodes":[5,7,61]},{"type":"tag","name":"h2","attrs":{},"childNodes":[6]},{"type":"text","content":"图片编辑器","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[8,21,31,45]},{"type":"tag","name":"li","attrs":{},"childNodes":[9,11]},{"type":"tag","name":"label","attrs":{},"childNodes":[10]},{"type":"text","content":"文件","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[12,15,18]},{"type":"tag","name":"li","attrs":{},"childNodes":[13]},{"type":"tag","name":"label","attrs":{"tag":"imgFile1","ui-on:click":"triggleBtn"},"childNodes":[14]},{"type":"text","content":"打开","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[16]},{"type":"tag","name":"label","attrs":{"ui-on:click":"saveImage"},"childNodes":[17]},{"type":"text","content":"保存","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[19]},{"type":"tag","name":"label","attrs":{"tag":"imgFile2","ui-on:click":"triggleBtn"},"childNodes":[20]},{"type":"text","content":"置入","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[22,24]},{"type":"tag","name":"label","attrs":{},"childNodes":[23]},{"type":"text","content":"图像","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[25,28]},{"type":"tag","name":"li","attrs":{},"childNodes":[26]},{"type":"tag","name":"label","attrs":{"ui-on:click":"editCanvasSize"},"childNodes":[27]},{"type":"text","content":"画布大小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[29]},{"type":"tag","name":"label","attrs":{"ui-on:click":"editImageSize"},"childNodes":[30]},{"type":"text","content":"图像大小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[32,34]},{"type":"tag","name":"label","attrs":{},"childNodes":[33]},{"type":"text","content":"选择","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[35,38,41,42]},{"type":"tag","name":"li","attrs":{},"childNodes":[36]},{"type":"tag","name":"label","attrs":{},"childNodes":[37]},{"type":"text","content":"取消选择","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[39]},{"type":"tag","name":"label","attrs":{},"childNodes":[40]},{"type":"text","content":"反选","childNodes":[]},{"type":"tag","name":"li","attrs":{"class":"split-line"},"childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[43]},{"type":"tag","name":"label","attrs":{},"childNodes":[44]},{"type":"text","content":"色彩范围","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[46,48]},{"type":"tag","name":"label","attrs":{},"childNodes":[47]},{"type":"text","content":"窗口","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[49,52,55,58]},{"type":"tag","name":"li","attrs":{},"childNodes":[50]},{"type":"tag","name":"label","attrs":{"ui-on:click":"toggleWin","tag":"layer","ui-bind:active":"isMenuOpen.layer?'yes':'no'"},"childNodes":[51]},{"type":"text","content":"图层","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[53]},{"type":"tag","name":"label","attrs":{"ui-on:click":"toggleWin","tag":"tool","ui-bind:active":"isMenuOpen.tool?'yes':'no'"},"childNodes":[54]},{"type":"text","content":"工具箱","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[56]},{"type":"tag","name":"label","attrs":{},"childNodes":[57]},{"type":"text","content":"通道","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[59]},{"type":"tag","name":"label","attrs":{},"childNodes":[60]},{"type":"text","content":"画笔","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[62,64]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[63]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[65]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"tool-config"},"childNodes":[67,71,75,79,83,87,100,104]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='move'?'yes':'no'"},"childNodes":[68]},{"type":"tag","name":"li","attrs":{},"childNodes":[69,70]},{"type":"text","content":"移动距离：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"move_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='eraser'?'yes':'no'"},"childNodes":[72]},{"type":"tag","name":"li","attrs":{},"childNodes":[73,74]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"eraser_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='eraser-bg'?'yes':'no'"},"childNodes":[76]},{"type":"tag","name":"li","attrs":{},"childNodes":[77,78]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"eraser_bg_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='drap'?'yes':'no'"},"childNodes":[80]},{"type":"tag","name":"li","attrs":{},"childNodes":[81,82]},{"type":"text","content":"移动距离：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"drap_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='painter'?'yes':'no'"},"childNodes":[84]},{"type":"tag","name":"li","attrs":{},"childNodes":[85,86]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"painter_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='resize'?'yes':'no'"},"childNodes":[88,94,97]},{"type":"tag","name":"li","attrs":{},"childNodes":[89,90,91,92,93]},{"type":"text","content":"方向：","childNodes":[]},{"type":"tag","name":"input","attrs":{"ui-model":"resize_direction","type":"radio","name":"resize_direction","value":"amplify"},"childNodes":[]},{"type":"text","content":"放大","childNodes":[]},{"type":"tag","name":"input","attrs":{"ui-model":"resize_direction","type":"radio","name":"resize_direction","value":"reduce"},"childNodes":[]},{"type":"text","content":"缩小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[95,96]},{"type":"text","content":"速度：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"resize_velocity"},"childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[98]},{"type":"tag","name":"button","attrs":{"ui-on:click":"resetSize"},"childNodes":[99]},{"type":"text","content":"恢复尺寸","childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='text'?'yes':'no'"},"childNodes":[101]},{"type":"tag","name":"li","attrs":{},"childNodes":[102,103]},{"type":"text","content":"文字大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"text_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='geometry'?'yes':'no'"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"image"},"childNodes":[106]},{"type":"tag","name":"canvas","attrs":{"ref":"mycanvas","ui-bind:style":"'transform:scale('+scale+');left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px;margin-top:50px;margin-left:calc(50% - ' + width * 0.5 + 'px);'"},"childNodes":[]}]
+    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,4,66,105]},{"type":"tag","name":"div","attrs":{"class":"no-view"},"childNodes":[2,3]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"imgFile1","flag":"import","ui-on:change":"openImage","accept":"image/*"},"childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"imgFile2","flag":"append","ui-on:change":"openImage","accept":"image/*"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"menu","ui-dragdrop:desktop":""},"childNodes":[5,7,61]},{"type":"tag","name":"h2","attrs":{},"childNodes":[6]},{"type":"text","content":"图片编辑器","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[8,21,31,45]},{"type":"tag","name":"li","attrs":{},"childNodes":[9,11]},{"type":"tag","name":"label","attrs":{},"childNodes":[10]},{"type":"text","content":"文件","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[12,15,18]},{"type":"tag","name":"li","attrs":{},"childNodes":[13]},{"type":"tag","name":"label","attrs":{"tag":"imgFile1","ui-on:click":"triggleBtn"},"childNodes":[14]},{"type":"text","content":"打开","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[16]},{"type":"tag","name":"label","attrs":{"ui-on:click":"saveImage"},"childNodes":[17]},{"type":"text","content":"保存","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[19]},{"type":"tag","name":"label","attrs":{"tag":"imgFile2","ui-on:click":"triggleBtn"},"childNodes":[20]},{"type":"text","content":"置入","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[22,24]},{"type":"tag","name":"label","attrs":{},"childNodes":[23]},{"type":"text","content":"图像","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[25,28]},{"type":"tag","name":"li","attrs":{},"childNodes":[26]},{"type":"tag","name":"label","attrs":{"ui-on:click":"editCanvasSize"},"childNodes":[27]},{"type":"text","content":"画布大小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[29]},{"type":"tag","name":"label","attrs":{"ui-on:click":"editImageSize"},"childNodes":[30]},{"type":"text","content":"图像大小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[32,34]},{"type":"tag","name":"label","attrs":{},"childNodes":[33]},{"type":"text","content":"选择","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[35,38,41,42]},{"type":"tag","name":"li","attrs":{},"childNodes":[36]},{"type":"tag","name":"label","attrs":{},"childNodes":[37]},{"type":"text","content":"取消选择","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[39]},{"type":"tag","name":"label","attrs":{},"childNodes":[40]},{"type":"text","content":"反选","childNodes":[]},{"type":"tag","name":"li","attrs":{"class":"split-line"},"childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[43]},{"type":"tag","name":"label","attrs":{},"childNodes":[44]},{"type":"text","content":"色彩范围","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[46,48]},{"type":"tag","name":"label","attrs":{},"childNodes":[47]},{"type":"text","content":"窗口","childNodes":[]},{"type":"tag","name":"ul","attrs":{},"childNodes":[49,52,55,58]},{"type":"tag","name":"li","attrs":{},"childNodes":[50]},{"type":"tag","name":"label","attrs":{"ui-on:click":"toggleWin","tag":"layer","ui-bind:active":"isMenuOpen.layer?'yes':'no'"},"childNodes":[51]},{"type":"text","content":"图层","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[53]},{"type":"tag","name":"label","attrs":{"ui-on:click":"toggleWin","tag":"tool","ui-bind:active":"isMenuOpen.tool?'yes':'no'"},"childNodes":[54]},{"type":"text","content":"工具箱","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[56]},{"type":"tag","name":"label","attrs":{},"childNodes":[57]},{"type":"text","content":"通道","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[59]},{"type":"tag","name":"label","attrs":{},"childNodes":[60]},{"type":"text","content":"画笔","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[62,64]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[63]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[65]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"tool-config"},"childNodes":[67,71,75,79,83,87,100,104]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='move'?'yes':'no'"},"childNodes":[68]},{"type":"tag","name":"li","attrs":{},"childNodes":[69,70]},{"type":"text","content":"移动距离：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"move_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='eraser'?'yes':'no'"},"childNodes":[72]},{"type":"tag","name":"li","attrs":{},"childNodes":[73,74]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"eraser_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='eraser-bg'?'yes':'no'"},"childNodes":[76]},{"type":"tag","name":"li","attrs":{},"childNodes":[77,78]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"eraser_bg_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='drap'?'yes':'no'"},"childNodes":[80]},{"type":"tag","name":"li","attrs":{},"childNodes":[81,82]},{"type":"text","content":"移动距离：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"drap_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='painter'?'yes':'no'"},"childNodes":[84]},{"type":"tag","name":"li","attrs":{},"childNodes":[85,86]},{"type":"text","content":"大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"painter_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='resize'?'yes':'no'"},"childNodes":[88,94,97]},{"type":"tag","name":"li","attrs":{},"childNodes":[89,90,91,92,93]},{"type":"text","content":"方向：","childNodes":[]},{"type":"tag","name":"input","attrs":{"ui-model":"resize_direction","type":"radio","name":"resize_direction","value":"amplify"},"childNodes":[]},{"type":"text","content":"放大","childNodes":[]},{"type":"tag","name":"input","attrs":{"ui-model":"resize_direction","type":"radio","name":"resize_direction","value":"reduce"},"childNodes":[]},{"type":"text","content":"缩小","childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[95,96]},{"type":"text","content":"速度：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"resize_velocity"},"childNodes":[]},{"type":"tag","name":"li","attrs":{},"childNodes":[98]},{"type":"tag","name":"button","attrs":{"ui-on:click":"resetSize"},"childNodes":[99]},{"type":"text","content":"恢复尺寸","childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='text'?'yes':'no'"},"childNodes":[101]},{"type":"tag","name":"li","attrs":{},"childNodes":[102,103]},{"type":"text","content":"文字大小：","childNodes":[]},{"type":"tag","name":"input","attrs":{"type":"text","ui-model":"text_size"},"childNodes":[]},{"type":"tag","name":"ul","attrs":{"ui-bind:active":"activeTool=='geometry'?'yes':'no'"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"image","ref":"editorView"},"childNodes":[106,107]},{"type":"tag","name":"canvas","attrs":{"ref":"mycanvas","ui-bind:style":"'transform:scale('+scale+');left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px;margin-top:50px;margin-left:calc(50% - ' + width * 0.5 + 'px);'"},"childNodes":[]},{"type":"tag","name":"canvas","attrs":{"ref":"mycursor","ui-bind:style":"'pointer-events:none;transform:scale('+scale+');left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px;margin-top:50px;margin-left:calc(50% - ' + width * 0.5 + 'px);'"},"childNodes":[]}]
 
     return __pkg__scope_bundle__;
 }
@@ -538,7 +630,7 @@ window.__pkg__bundleSrc__['167']=function(){
     var __pkg__scope_args__;
     var styleElement = document.createElement('style');
 var head = document.head || document.getElementsByTagName('head')[0];
-styleElement.innerHTML = "\n [page-view=\"image-editor\"]{\n\nwidth: calc(100vw - 160px);\n\nheight: calc(100vh - 70px);\n\nleft: 80px;\n\ntop: 20px;\n\n}\n\n [page-view=\"image-editor\"] .no-view{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"][focus=\"no\"]>div.menu{\n\nbackground-color: #afbabe;\n\n}\n\n [page-view=\"image-editor\"]>div.menu{\n\nbackground-color: #cad6db;\n\nborder-bottom: 1px solid gray;\n\nposition: relative;\n\ntop: 0;\n\nleft: 0;\n\nwidth: 100%;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>h2, [page-view=\"image-editor\"]>div.menu ul{\n\nvertical-align: top;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>h2{\n\nfont-size: 12px;\n\ndisplay: inline-block;\n\nheight: 30px;\n\nline-height: 30px;\n\nbackground-image: url('./image-editor.png');\n\nbackground-size: auto 70%;\n\nbackground-repeat: no-repeat;\n\nbackground-position: 5px center;\n\npadding-left: 30px;\n\npadding-right: 10px;\n\nborder-right: 1px solid #cccccc;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul{\n\ndisplay: inline-block;\n\nline-height: 30px;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul label{\n\ncursor: pointer;\n\npadding: 0 5px;\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul label>span{\n\nfloat: right;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul label{\n\npadding-left: 20px;\n\nbackground-repeat: no-repeat;\n\nbackground-position: left center;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul label[active='yes']{\n\nbackground-image: url('./right.png');\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li:hover{\n\nbackground-color: #cfd3d5;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li:hover>ul{\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li.split-line{\n\nbackground-color: #ebedee;\n\nheight: 1px;\n\nmargin: 2px 0;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul>li{\n\ndisplay: inline-block;\n\nmargin-left: 10px;\n\nposition: relative;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul>li>ul{\n\nposition: absolute;\n\nborder: 1px solid gray;\n\nborder-radius: 5px;\n\nwidth: 100px;\n\ntop: 25px;\n\nleft: -5px;\n\nbackground-color: white;\n\npadding: 5px 0;\n\nz-index: 1;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config{\n\nborder-bottom: 1px solid #ccc;\n\nheight: 50px;\n\nline-height: 50px;\n\nposition: relative;\n\ntop: 0;\n\nwidth: 100%;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul[active='yes']{\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li{\n\npadding-left: 20px;\n\ndisplay: inline-block;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>input[type=\"text\"]{\n\nwidth: 50px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>input[type='radio']{\n\nvertical-align: sub;\n\nmargin-left: 10px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>button{\n\noutline: none;\n\nborder: none;\n\nbackground-color: black;\n\ncolor: white;\n\nfont-size: 12px;\n\nborder-radius: 5px;\n\ncursor: pointer;\n\n}\n\n [page-view=\"image-editor\"]>div.image{\n\nwidth: 100%;\n\nheight: calc(100% - 80px);\n\noverflow: hidden;\n\nposition: relative;\n\ntop: 0;\n\n}\n\n [page-view=\"image-editor\"]>div.image>canvas{\n\nposition: absolute;\n\noutline: 1px solid #ccc;\n\n/* // cursor: none;\r */\n\nbackground-image: url('./mosaic.png');\n\n}\n";
+styleElement.innerHTML = "\n [page-view=\"image-editor\"]{\n\nwidth: calc(100vw - 160px);\n\nheight: calc(100vh - 70px);\n\nleft: 80px;\n\ntop: 20px;\n\n}\n\n [page-view=\"image-editor\"] .no-view{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"][focus=\"no\"]>div.menu{\n\nbackground-color: #afbabe;\n\n}\n\n [page-view=\"image-editor\"]>div.menu{\n\nbackground-color: #cad6db;\n\nborder-bottom: 1px solid gray;\n\nposition: relative;\n\ntop: 0;\n\nleft: 0;\n\nwidth: 100%;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>h2, [page-view=\"image-editor\"]>div.menu ul{\n\nvertical-align: top;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>h2{\n\nfont-size: 12px;\n\ndisplay: inline-block;\n\nheight: 30px;\n\nline-height: 30px;\n\nbackground-image: url('./image-editor.png');\n\nbackground-size: auto 70%;\n\nbackground-repeat: no-repeat;\n\nbackground-position: 5px center;\n\npadding-left: 30px;\n\npadding-right: 10px;\n\nborder-right: 1px solid #cccccc;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul{\n\ndisplay: inline-block;\n\nline-height: 30px;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul label{\n\ncursor: pointer;\n\npadding: 0 5px;\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul label>span{\n\nfloat: right;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul label{\n\npadding-left: 20px;\n\nbackground-repeat: no-repeat;\n\nbackground-position: left center;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul label[active='yes']{\n\nbackground-image: url('./right.png');\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li:hover{\n\nbackground-color: #cfd3d5;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li:hover>ul{\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul li.split-line{\n\nbackground-color: #ebedee;\n\nheight: 1px;\n\nmargin: 2px 0;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul ul{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul>li{\n\ndisplay: inline-block;\n\nmargin-left: 10px;\n\nposition: relative;\n\n}\n\n [page-view=\"image-editor\"]>div.menu>ul>li>ul{\n\nposition: absolute;\n\nborder: 1px solid gray;\n\nborder-radius: 5px;\n\nwidth: 100px;\n\ntop: 25px;\n\nleft: -5px;\n\nbackground-color: white;\n\npadding: 5px 0;\n\nz-index: 1;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config{\n\nborder-bottom: 1px solid #ccc;\n\nheight: 50px;\n\nline-height: 50px;\n\nposition: relative;\n\ntop: 0;\n\nwidth: 100%;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul{\n\ndisplay: none;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul[active='yes']{\n\ndisplay: block;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li{\n\npadding-left: 20px;\n\ndisplay: inline-block;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>input[type=\"text\"]{\n\nwidth: 50px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>input[type='radio']{\n\nvertical-align: sub;\n\nmargin-left: 10px;\n\n}\n\n [page-view=\"image-editor\"]>div.tool-config>ul>li>button{\n\noutline: none;\n\nborder: none;\n\nbackground-color: black;\n\ncolor: white;\n\nfont-size: 12px;\n\nborder-radius: 5px;\n\ncursor: pointer;\n\n}\n\n [page-view=\"image-editor\"]>div.image{\n\nwidth: 100%;\n\nheight: calc(100% - 80px);\n\noverflow: hidden;\n\nposition: relative;\n\ntop: 0;\n\n}\n\n [page-view=\"image-editor\"]>div.image>canvas{\n\nposition: absolute;\n\noutline: 1px solid #ccc;\n\ncursor: none;\n\n}\n\n [page-view=\"image-editor\"]>div.image>canvas:first-child{\n\nbackground-image: url('./mosaic.png');\n\n}\n";
 styleElement.setAttribute('type', 'text/css');head.appendChild(styleElement);
 
     return __pkg__scope_bundle__;
@@ -554,12 +646,12 @@ window.__pkg__bundleSrc__['168']=function(){
 
     // 画布或图像大小
     size: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle42.js','169')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle42.js','169')
     },
 
     // 保存
     save: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle43.js','170')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle43.js','170')
     }
 
 };
@@ -577,12 +669,12 @@ window.__pkg__bundleSrc__['171']=function(){
 
     // 工具箱
     tool: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle44.js','172')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle44.js','172')
     },
 
     // 图层
     layer: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.2.4-bundle45.js','173')
+        return window.__pkg__getLazyBundle('./dist/main-v0.2.5-bundle45.js','173')
     }
 
 };
@@ -666,22 +758,22 @@ __pkg__scope_bundle__.default= function (canvas, width, height, opts) {
     var config = {
 
         // 文字大小
-        "font-size": 16,
+        "fontSize": 16,
 
         // 字体
-        "font-family": "sans-serif",
+        "fontFamily": "sans-serif",
 
         // 字重
-        "font-weight": 400,
+        "fontWeight": 400,
 
         // 字类型
-        "font-style": "normal",
+        "fontStyle": "normal",
 
         // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合）
-        "arc-start-cap": 'butt',
+        "arcStartCap": 'butt',
 
         // 圆弧结束端闭合方式，和上一个类似
-        "arc-end-cap": 'butt',
+        "arcWndCap": 'butt',
     };
 
     // 配置生效方法
@@ -953,7 +1045,7 @@ __pkg__scope_bundle__.initText = function (painter, config, x, y, deg) {
     painter.beginPath();
     painter.translate(x, y);
     painter.rotate(deg);
-    painter.font = config['font-style'] + " " + config["font-weight"] + " " + config['font-size'] + "px " + config['font-family'];
+    painter.font = config.fontStyle + " " + config.fontWeight + " " + config.fontSize + "px " + config.fontFamily;
     return painter;
 };
 
@@ -991,18 +1083,18 @@ __pkg__scope_bundle__.initArc = function (painter, config, cx, cy, r1, r2, begin
             // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
             cx, cy, r1, beginA, endA, false);
         // 结尾
-        if (config["arc-end-cap"] != 'round')
+        if (config.arcEndCap != 'round')
             painter.lineTo(endOuterX, endOuterY);
         else
             painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
         painter.arc(cx, cy, r2, endA, beginA, true);
         // 开头
-        if (config["arc-start-cap"] != 'round')
+        if (config.arcStartCap != 'round')
             painter.lineTo(begInnerX, begInnerY);
         else
             painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
     });
-    if (config["arc-start-cap"] == 'butt') painter.closePath();
+    if (config.arcStartCap == 'butt') painter.closePath();
     return painter;
 };
 
@@ -1326,6 +1418,35 @@ __pkg__scope_bundle__.default= function (callback) {
         document.body.removeEventListener('keydown', doKeydown, false);
         document.body.removeEventListener('keyup', doKeyup, false);
     }
+};
+
+    return __pkg__scope_bundle__;
+}
+
+/*************************** [bundle] ****************************/
+// Original file:./src/tool/xhtml/mousePosition
+/*****************************************************************/
+window.__pkg__bundleSrc__['97']=function(){
+    var __pkg__scope_bundle__={};
+    var __pkg__scope_args__;
+    // 获取鼠标相对特定元素左上角位置
+__pkg__scope_bundle__.default= function (el, event) {
+
+    event = event || window.event;
+
+    // 返回元素的大小及其相对于视口的位置
+    var bounding = el.getBoundingClientRect();
+
+    if (!event || !event.clientX)
+        throw new Error('Event is necessary!');
+    var temp = {
+
+        // 鼠标相对元素位置 = 鼠标相对窗口坐标 - 元素相对窗口坐标
+        "x": event.clientX - bounding.left + el.scrollLeft,
+        "y": event.clientY - bounding.top + el.scrollTop
+    };
+
+    return temp;
 };
 
     return __pkg__scope_bundle__;

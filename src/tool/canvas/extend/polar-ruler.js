@@ -37,8 +37,8 @@ export default function (painter, attr) {
         'lineWidth': 1,
         'fillStyle': attr.color,
         'strokeStyle': attr.color,
-        'font-size': attr["font-size"],
-        "font-weight": attr["font-weight"],
+        'fontSize': attr["font-size"],
+        "fontWeight": attr["font-weight"],
         'textAlign': 'center',
         'textBaseline': 'middle',
         "lineDash": []

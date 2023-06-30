@@ -159,8 +159,8 @@ export default function (obj, props) {
                     painter.config({
                         "strokeStyle": "white",
                         "textAlign": "center",
-                        "font-weight": 200,
-                        "font-size": 12
+                        "fontWeight": 200,
+                        "fontSize": 12
                     });
                     (function doit(data, beginDeg, deg, radiusNum, isSelect) {
                         if (data.children) {

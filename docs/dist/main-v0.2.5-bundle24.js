@@ -1,206 +1,105 @@
 
 /*************************** [bundle] ****************************/
-// Original file:./src/pages/snake-eating/index.js
+// Original file:./src/pages/geo-json/index.js
 /*****************************************************************/
-window.__pkg__bundleSrc__['74']=function(){
+window.__pkg__bundleSrc__['79']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_args__=window.__pkg__getBundle('193');
+    __pkg__scope_args__=window.__pkg__getBundle('208');
 var template =__pkg__scope_args__.default;
 
-__pkg__scope_args__=window.__pkg__getBundle('194');
+__pkg__scope_args__=window.__pkg__getBundle('209');
 
+
+__pkg__scope_args__=window.__pkg__getBundle('210');
+var getBoundary =__pkg__scope_args__.default;
 
 __pkg__scope_args__=window.__pkg__getBundle('130');
 var canvasRender =__pkg__scope_args__.default;
 
-__pkg__scope_args__=window.__pkg__getBundle('159');
-var getKeyCode =__pkg__scope_args__.default;
+__pkg__scope_args__=window.__pkg__getBundle('211');
+var eoapFactory =__pkg__scope_args__.default;
+
+__pkg__scope_args__=window.__pkg__getBundle('212');
+var drawGeometry =__pkg__scope_args__.default;
 
 
 __pkg__scope_bundle__.default= function (obj) {
-    var painter;
 
     return {
-        name: "snake-eating",
+        name: "geo-json",
         render: template,
-        data: {
-
-            // 提示内容
-            tips: obj.ref("温馨提示：点击「开始游戏」启动运行！"),
-
-            // 记录是否游戏中
-            isRuning: obj.ref(false),
-
-            // 食物
-            foodBlock: [],
-
-            // 记录小蛇
-            blocks: [],
-
-            // 下一步走法
-            mulpD: ""
-
-        },
         beforeFocus: function () {
-            document.getElementsByTagName('title')[0].innerText = "贪吃蛇" + window.systeName;
-            document.getElementById('icon-logo').setAttribute('href', './snake-eating.png');
+            document.getElementsByTagName('title')[0].innerText = "geoJSON查看器" + window.systeName;
+            document.getElementById('icon-logo').setAttribute('href', './geoJSON.png');
         },
-        mounted: function () {
-            var canvas = this._refs.mycanvas.value;
 
-            // 获取画笔
-            painter = canvasRender(canvas, canvas.clientWidth, canvas.clientHeight);
-
-            this.updateView();
-
-            // 启动键盘监听
-            var _this = this;
-            getKeyCode(function (keyCode) {
-                switch (keyCode) {
-                    case 'up': {
-                        _this.mulpD = [0, -1];
-                        break;
-                    }
-                    case 'down': {
-                        _this.mulpD = [0, 1];
-                        break;
-                    }
-                    case 'left': {
-                        _this.mulpD = [-1, 0];
-                        break;
-                    }
-                    case 'right': {
-                        _this.mulpD = [1, 0];
-                        break;
-                    }
-                }
-            });
-        },
         methods: {
 
-            // 刷新视图
-            updateView: function () {
-                var i;
-
-                painter.clearRect(0, 0, 500, 500);
-
-                // 先绘制格子
-                painter.config({
-                    strokeStyle: "white"
+            openDownload: function () {
+                this.$openView("browser", {
+                    url: "http://datav.aliyun.com/portal/school/atlas/area_selector"
                 });
-                for (i = 0; i < 25; i++) {
-                    painter
-
-                        // 横线条
-                        .beginPath().moveTo(0, i * 20).lineTo(500, i * 20).stroke()
-
-                        // 纵线条
-                        .beginPath().moveTo(i * 20, 0).lineTo(i * 20, 500).stroke();
-
-                }
-
-                //  然后绘制小格子
-                for (i = 0; i < this.blocks.length; i++) {
-                    painter.config({
-                        fillStyle: i == 0 ? "#aaaaaa" : "white"
-                    }).fillRect(this.blocks[i][0] * 20, this.blocks[i][1] * 20, 20, 20);
-                }
-
-                // 最后绘制食物
-                painter.config('fillStyle', 'red').fillRect(this.foodBlock[0] * 20, this.foodBlock[1] * 20, 20, 20);
-
             },
 
-            // 开始游戏
-            beginGame: function () {
+            triggleFile: function () {
+                this._refs.file.value.click();
+            },
 
-                // 初始化参数
-                this.isRuning = true;
-                this.mulpD = [0, -1];
-                this.foodBlock = [20, 20];
-                this.blocks = [
-                    [10, 10],
-                    [10, 11],
-                    [10, 12],
-                    [10, 13],
-                    [11, 13],
-                    [12, 13],
-                    [13, 13],
-                    [14, 13]
-                ];
-
-                this.updateView();
-
-                // 轮询修改数据
+            inputLocalFile: function (event, target) {
                 var _this = this;
-                var interval = setInterval(function () {
 
-                    var newBlock = [
-                        _this.blocks[0][0] + _this.mulpD[0],
-                        _this.blocks[0][1] + _this.mulpD[1]
-                    ];
+                var file = target.files[0];
+                var reader = new FileReader();
 
-                    // 判断是否合法
-                    if (!_this.isValidBlock(newBlock)) {
+                reader.onload = function () {
 
-                        _this.isRuning = false;
-                        clearInterval(interval);
-                        _this.tips = "[分数：" + (_this.blocks.length - 8) + "]小蛇出界或者撞到自己了。";
+                    try {
+                        var geoJSON = JSON.parse(reader.result);
+                        var boundary = getBoundary(geoJSON);
 
-                        return;
+                        var painter = canvasRender(_this._refs.mycanvas.value, 800, 600);
+                        var eoap = eoapFactory({
+                            scale: Math.min(420 / (boundary.maxX - boundary.minX), 300 / (boundary.maxY - boundary.minY)),
+                            center: [(boundary.minX + boundary.maxX) * 0.5, (boundary.minY + boundary.maxY) * 0.5]
+                        });
+
+                        var i, cx = 400, cy = 300;
+
+                        // 绘制区域
+
+                        painter.config({
+                            strokeStyle: "#555555",
+                            fillStyle: "white"
+                        });
+
+                        for (var i = 0; i < geoJSON.features.length; i++) {
+                            drawGeometry(eoap, painter, cx, cy, geoJSON.features[i].geometry);
+                        }
+
+                        // 绘制名称
+
+                        painter.config({
+                            textAlign: "center",
+                            fillStyle: "black",
+                            "fontSize": 10
+                        });
+
+                        var dxy;
+                        for (var i = 0; i < geoJSON.features.length; i++) {
+                            if (Array.isArray(geoJSON.features[i].properties.center)) {
+                                dxy = eoap(geoJSON.features[i].properties.center[0], geoJSON.features[i].properties.center[1]);
+                                painter.fillText(geoJSON.features[i].properties.name, cx + dxy[0], cy + dxy[1]);
+                            }
+                        }
+
+                    } catch (e) {
+                        console.error(e);
+                        alert('出现错误导致程序执行中断，你可以带着当前使用的GeoJSON去（ ' + window._project_.bugs + ' ）给我们留言。');
                     }
+                };
 
-                    _this.blocks.unshift(newBlock);
-
-                    // 判断是否吃到食物了
-                    if (
-                        newBlock[0] == _this.foodBlock[0] &&
-                        newBlock[1] == _this.foodBlock[1]
-                    ) {
-                        _this.foodBlock = _this.newFood();
-                    } else {
-                        _this.blocks.pop();
-                    }
-
-                    _this.updateView();
-                }, 200);
-
-            },
-
-            // 判断是否合法
-            isValidBlock: function (block) {
-
-                // 如果越界了
-                if (block[0] < 0 || block[0] >= 25 || block[1] < 0 || block[1] >= 25) return false;
-
-                for (var i = 0; i < this.blocks.length; i++) {
-
-                    // 如果撞到自己了
-                    if (this.blocks[i][0] == block[0] && this.blocks[i][1] == block[1]) return false;
-                }
-
-                return true;
-            },
-
-            // 产生新的事物
-            newFood: function () {
-                var newFood, tryNum = 1;
-                do {
-
-                    if (tryNum >= 10000) {
-                        this.isRuning = false;
-                        this.tips = '意外终止，系统内部错误。';
-                    }
-
-                    newFood = [
-                        +(Math.random() * 24).toFixed(0),
-                        +(Math.random() * 24).toFixed(0)
-                    ];
-                    tryNum += 1;
-                } while (!this.isValidBlock(newFood));
-
-                return newFood;
+                reader.readAsText(file);
             }
         }
     };
@@ -210,26 +109,143 @@ __pkg__scope_bundle__.default= function (obj) {
 }
 
 /*************************** [bundle] ****************************/
-// Original file:./src/pages/snake-eating/index.html
+// Original file:./src/pages/geo-json/index.html
 /*****************************************************************/
-window.__pkg__bundleSrc__['193']=function(){
+window.__pkg__bundleSrc__['208']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,8,9]},{"type":"tag","name":"h2","attrs":{"ui-dragdrop:desktop":""},"childNodes":[2,3]},{"type":"text","content":"贪吃蛇","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[4,6]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[5]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[7]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"canvas","attrs":{"ref":"mycanvas"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"ui-bind:active":"isRuning?'no':'yes'"},"childNodes":[10,11]},{"type":"tag","name":"span","attrs":{"ui-bind":"tips"},"childNodes":[]},{"type":"tag","name":"button","attrs":{"ui-on:click":"beginGame"},"childNodes":[12]},{"type":"text","content":"开始游戏","childNodes":[]}]
+    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,11,12,15]},{"type":"tag","name":"header","attrs":{"ui-dragdrop:desktop":""},"childNodes":[2,4,6]},{"type":"tag","name":"h2","attrs":{},"childNodes":[3]},{"type":"text","content":"geoJSON查看器","childNodes":[]},{"type":"tag","name":"button","attrs":{"ui-on:click":"triggleFile"},"childNodes":[5]},{"type":"text","content":"选择文件","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[7,9]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[8]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[10]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"canvas","attrs":{"ref":"mycanvas"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"help-url"},"childNodes":[13]},{"type":"tag","name":"a","attrs":{"href":"javascript:void(0)","ui-on:click":"openDownload"},"childNodes":[14]},{"type":"text","content":"点击我进入GeoJSON下载页面","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"no-view"},"childNodes":[16]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"file","ui-on:change":"inputLocalFile","accept":".json"},"childNodes":[]}]
 
     return __pkg__scope_bundle__;
 }
 
 /*************************** [bundle] ****************************/
-// Original file:./src/pages/snake-eating/index.scss
+// Original file:./src/pages/geo-json/index.scss
 /*****************************************************************/
-window.__pkg__bundleSrc__['194']=function(){
+window.__pkg__bundleSrc__['209']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
     var styleElement = document.createElement('style');
 var head = document.head || document.getElementsByTagName('head')[0];
-styleElement.innerHTML = "\n [page-view=\"snake-eating\"]{\n\nwidth: 500px;\n\nleft: calc(50vw - 250px);\n\ntop: 50px;\n\nfont-size: 0;\n\n}\n\n [page-view=\"snake-eating\"][focus=\"no\"]>h2{\n\nbackground-color: #817e22;\n\n}\n\n [page-view=\"snake-eating\"]>h2{\n\nfont-size: 18px;\n\nbackground-color: #98942e;\n\nline-height: 50px;\n\nbackground-image: url(\"./snake-eating.png\");\n\nbackground-repeat: no-repeat;\n\nbackground-size: auto 80%;\n\nbackground-position: 5px center;\n\npadding-left: 51px;\n\nfont-weight: 200;\n\n}\n\n [page-view=\"snake-eating\"]>canvas{\n\nbackground-color: #d3d0d0;\n\nheight: 500px;\n\nwidth: 500px;\n\n}\n\n [page-view=\"snake-eating\"]>div{\n\nposition: absolute;\n\nleft: 0;\n\ntop: 50px;\n\nwidth: 500px;\n\nheight: 500px;\n\nbackground-color: rgba(0, 0, 0, 0.36);\n\n}\n\n [page-view=\"snake-eating\"]>div[active='no']{\n\ndisplay: none;\n\n}\n\n [page-view=\"snake-eating\"]>div>span{\n\ndisplay: inline-block;\n\nposition: absolute;\n\nleft: 20px;\n\ntop: 20px;\n\nfont-weight: 200;\n\ncolor: white;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"snake-eating\"]>div>button{\n\nmargin: auto;\n\ndisplay: block;\n\nbackground-color: red;\n\ncolor: white;\n\nwidth: 70px;\n\nheight: 30px;\n\nmargin-top: 235px;\n\noutline: none;\n\nborder: none;\n\ncursor: pointer;\n\n}\n";
+styleElement.innerHTML = "\n [page-view=\"geo-json\"]{\n\nleft: calc(50vw - 400px);\n\ntop: calc(50vh - 345px);\n\nfont-size: 0;\n\n}\n\n [page-view=\"geo-json\"][focus=\"no\"]>header{\n\nbackground-color: #e8eaed;\n\n}\n\n [page-view=\"geo-json\"]>header{\n\ntext-align: left;\n\nline-height: 50px;\n\nbackground-color: #ffffff;\n\nborder-bottom: 1px solid rgb(187, 184, 184);\n\n}\n\n [page-view=\"geo-json\"]>header>h2{\n\ncolor: #49b4f1;\n\nfont-size: 20px;\n\npadding-left: 50px;\n\nbackground-image: url(\"./geoJSON.png\");\n\nbackground-position: 10px center;\n\nbackground-repeat: no-repeat;\n\nbackground-size: auto 60%;\n\nfont-family: cursive;\n\ndisplay: inline-block;\n\n}\n\n [page-view=\"geo-json\"]>header>button{\n\nfloat: right;\n\nheight: 30px;\n\npadding: 0 10px;\n\nborder: none;\n\nmargin-top: 10px;\n\ncursor: pointer;\n\nbackground-color: red;\n\ncolor: white;\n\nmargin-right: 200px;\n\nborder-radius: 15px;\n\n}\n\n [page-view=\"geo-json\"]>canvas{\n\nwidth: 800px;\n\nheight: 600px;\n\n}\n\n [page-view=\"geo-json\"]>div.help-url{\n\nposition: absolute;\n\nleft: 10px;\n\nbottom: 10px;\n\n}\n\n [page-view=\"geo-json\"]>div.help-url>a{\n\nfont-size: 12px;\n\ncolor: #000000;\n\ntext-decoration: underline;\n\n}\n\n [page-view=\"geo-json\"]>div.no-view{\n\ndisplay: none;\n\n}\n";
 styleElement.setAttribute('type', 'text/css');head.appendChild(styleElement);
+
+    return __pkg__scope_bundle__;
+}
+
+/*************************** [bundle] ****************************/
+// Original file:./src/tool/map/getBoundary
+/*****************************************************************/
+window.__pkg__bundleSrc__['210']=function(){
+    var __pkg__scope_bundle__={};
+    var __pkg__scope_args__;
+    var calcMultiPolygon = function (data) {
+
+    var minX = data[0][0][0][0],
+        maxX = data[0][0][0][0],
+        minY = data[0][0][0][1],
+        maxY = data[0][0][0][1],
+        i,
+        temp;
+
+    for (i = 0; i < data.length; i++) {
+        temp = calcPolygon(data[i]);
+
+        if (temp.minX < minX) minX = temp.minX;
+        if (temp.maxX > maxX) maxX = temp.maxX;
+        if (temp.minY < minY) minY = temp.minY;
+        if (temp.maxY > maxY) maxY = temp.maxY;
+
+    }
+
+    return {
+        minX: minX,
+        maxX: maxX,
+        minY: minY,
+        maxY: maxY
+    };
+
+};
+
+var calcPolygon = function (data) {
+
+    var minX = data[0][0][0],
+        maxX = data[0][0][0],
+        minY = data[0][0][1],
+        maxY = data[0][0][1],
+        i,
+        j;
+
+    for (i = 0; i < data.length; i++) {
+        for (j = 0; j < data[i].length; j++) {
+
+            if (minX > data[i][j][0]) minX = data[i][j][0];
+            else if (maxX < data[i][j][0]) maxX = data[i][j][0];
+
+            if (minY > data[i][j][1]) minY = data[i][j][1];
+            else if (maxY < data[i][j][1]) maxY = data[i][j][1];
+
+        }
+    }
+
+    return {
+        minX: minX,
+        maxX: maxX,
+        minY: minY,
+        maxY: maxY
+    };
+
+};
+
+var calcFeatureCollection = function (data) {
+
+    var temp = calcFeature(data.features[0]),
+        minX = temp.minX,
+        maxX = temp.maxX,
+        minY = temp.minY,
+        maxY = temp.maxY,
+        i,
+        temp;
+
+    for (i = 1; i < data.features.length; i++) {
+        temp = calcFeature(data.features[i]);
+
+        if (temp.minX < minX) minX = temp.minX;
+        if (temp.maxX > maxX) maxX = temp.maxX;
+        if (temp.minY < minY) minY = temp.minY;
+        if (temp.maxY > maxY) maxY = temp.maxY;
+    }
+
+    return {
+        minX: minX,
+        maxX: maxX,
+        minY: minY,
+        maxY: maxY
+    };
+
+};
+
+var calcFeature = function (data) {
+
+    if (data.geometry.type == 'Polygon' || data.geometry.type == 'MultiLineString') {
+        return calcPolygon(data.geometry.coordinates);
+    } else {
+        return calcMultiPolygon(data.geometry.coordinates);
+    }
+
+};
+
+__pkg__scope_bundle__.default= function (data) {
+
+    if (data.type == 'FeatureCollection') {
+        return calcFeatureCollection(data);
+    } else if (data.type == 'Feature') {
+        return calcFeature(data);
+    } else {
+        throw new Error('Type error：不是一个合法的geoJSON数据!');
+    }
+
+};
 
     return __pkg__scope_bundle__;
 }
@@ -281,22 +297,22 @@ __pkg__scope_bundle__.default= function (canvas, width, height, opts) {
     var config = {
 
         // 文字大小
-        "font-size": 16,
+        "fontSize": 16,
 
         // 字体
-        "font-family": "sans-serif",
+        "fontFamily": "sans-serif",
 
         // 字重
-        "font-weight": 400,
+        "fontWeight": 400,
 
         // 字类型
-        "font-style": "normal",
+        "fontStyle": "normal",
 
         // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合）
-        "arc-start-cap": 'butt',
+        "arcStartCap": 'butt',
 
         // 圆弧结束端闭合方式，和上一个类似
-        "arc-end-cap": 'butt',
+        "arcWndCap": 'butt',
     };
 
     // 配置生效方法
@@ -568,7 +584,7 @@ __pkg__scope_bundle__.initText = function (painter, config, x, y, deg) {
     painter.beginPath();
     painter.translate(x, y);
     painter.rotate(deg);
-    painter.font = config['font-style'] + " " + config["font-weight"] + " " + config['font-size'] + "px " + config['font-family'];
+    painter.font = config.fontStyle + " " + config.fontWeight + " " + config.fontSize + "px " + config.fontFamily;
     return painter;
 };
 
@@ -606,18 +622,18 @@ __pkg__scope_bundle__.initArc = function (painter, config, cx, cy, r1, r2, begin
             // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
             cx, cy, r1, beginA, endA, false);
         // 结尾
-        if (config["arc-end-cap"] != 'round')
+        if (config.arcEndCap != 'round')
             painter.lineTo(endOuterX, endOuterY);
         else
             painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
         painter.arc(cx, cy, r2, endA, beginA, true);
         // 开头
-        if (config["arc-start-cap"] != 'round')
+        if (config.arcStartCap != 'round')
             painter.lineTo(begInnerX, begInnerY);
         else
             painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
     });
-    if (config["arc-start-cap"] == 'butt') painter.closePath();
+    if (config.arcStartCap == 'butt') painter.closePath();
     return painter;
 };
 
@@ -742,204 +758,135 @@ __pkg__scope_bundle__.radialGradient = function (painter, cx, cy, r1, r2) {
 }
 
 /*************************** [bundle] ****************************/
-// Original file:./src/tool/keyCode
+// Original file:./src/tool/map/eoap
 /*****************************************************************/
-window.__pkg__bundleSrc__['159']=function(){
+window.__pkg__bundleSrc__['211']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    // 字典表
-var dictionary = {
+    
+/* 等角斜方位投影 */
 
-    // 数字
-    48: [0, ')'],
-    49: [1, '!'],
-    50: [2, '@'],
-    51: [3, '#'],
-    52: [4, '$'],
-    53: [5, '%'],
-    54: [6, '^'],
-    55: [7, '&'],
-    56: [8, '*'],
-    57: [9, '('],
-    96: [0, 0],
-    97: 1,
-    98: 2,
-    99: 3,
-    100: 4,
-    101: 5,
-    102: 6,
-    103: 7,
-    104: 8,
-    105: 9,
-    106: "*",
-    107: "+",
-    109: "-",
-    110: ".",
-    111: "/",
-
-    // 字母
-    65: ["a", "A"],
-    66: ["b", "B"],
-    67: ["c", "C"],
-    68: ["d", "D"],
-    69: ["e", "E"],
-    70: ["f", "F"],
-    71: ["g", "G"],
-    72: ["h", "H"],
-    73: ["i", "I"],
-    74: ["j", "J"],
-    75: ["k", "K"],
-    76: ["l", "L"],
-    77: ["m", "M"],
-    78: ["n", "N"],
-    79: ["o", "O"],
-    80: ["p", "P"],
-    81: ["q", "Q"],
-    82: ["r", "R"],
-    83: ["s", "S"],
-    84: ["t", "T"],
-    85: ["u", "U"],
-    86: ["v", "V"],
-    87: ["w", "W"],
-    88: ["x", "X"],
-    89: ["y", "Y"],
-    90: ["z", "Z"],
-
-    // 方向
-    37: "left",
-    38: "up",
-    39: "right",
-    40: "down",
-    33: "page up",
-    34: "page down",
-    35: "end",
-    36: "home",
-
-    // 控制键
-    16: "shift",
-    17: "ctrl",
-    18: "alt",
-    91: "command",
-    92: "command",
-    93: "command",
-    224: "command",
-    9: "tab",
-    20: "caps lock",
-    32: "spacebar",
-    8: "backspace",
-    13: "enter",
-    27: "esc",
-    46: "delete",
-    45: "insert",
-    144: "number lock",
-    145: "scroll lock",
-    12: "clear",
-    19: "pause",
-
-    // 功能键
-    112: "f1",
-    113: "f2",
-    114: "f3",
-    115: "f4",
-    116: "f5",
-    117: "f6",
-    118: "f7",
-    119: "f8",
-    120: "f9",
-    121: "f10",
-    122: "f11",
-    123: "f12",
-
-    // 余下键
-    189: ["-", "_"],
-    187: ["=", "+"],
-    219: ["[", "{"],
-    221: ["]", "}"],
-    220: ["\\", "|"],
-    186: [";", ":"],
-    222: ["'", '"'],
-    188: [",", "<"],
-    190: [".", ">"],
-    191: ["/", "?"],
-    192: ["`", "~"]
-
-};
-
-// 非独立键字典
-var help_key = ["shift", "ctrl", "alt"];
-
-// 返回键盘此时按下的键的组合结果
-var keyCode = function (event) {
-    event = event || window.event;
-
-    var keycode = event.keyCode || event.which;
-    var key = dictionary[keycode] || keycode;
-    if (!key) return;
-    if (key.constructor !== Array) key = [key, key];
-
-    var _key = key[0];
-
-    var shift = event.shiftKey ? "shift+" : "",
-        alt = event.altKey ? "alt+" : "",
-        ctrl = event.ctrlKey ? "ctrl+" : "";
-
-    var resultKey = "",
-        preKey = ctrl + shift + alt;
-
-    if (help_key.indexOf(key[0]) >= 0) {
-        key[0] = key[1] = "";
-    }
-
-    // 判断是否按下了caps lock
-    var lockPress = event.code == "Key" + event.key && !shift;
-
-    // 只有字母（且没有按下功能Ctrl、shift或alt）区分大小写
-    resultKey = (preKey + ((preKey == '' && lockPress) ? key[1] : key[0]));
-
-    if (key[0] == "") {
-        resultKey = resultKey.replace(/\+$/, '');
-    }
-
-    return resultKey == '' ? _key : resultKey;
-};
-
-__pkg__scope_bundle__.getKeyString = keyCode;
-
-/**
- * 获取键盘此时按下的键的组合结果
- * @param {Function} callback 回调，键盘有键被按下的时候触发
- * @return {Function} 返回一个函数，执行此函数可以取消键盘监听
- * @examples
- *  keyCode(function (data) {
- *      console.log(data);
- *  });
- */
-__pkg__scope_bundle__.default= function (callback) {
-
-    // 记录MacOS的command是否被按下
-    var macCommand = false;
-
-    var doKeydown = function (event) {
-        var keyStringCode = keyCode(event);
-        if (/command/.test(keyStringCode)) macCommand = true;
-
-        if (macCommand && !/command/.test(keyStringCode) && !/ctrl/.test(keyStringCode)) keyStringCode = "ctrl+" + keyStringCode;
-        callback(keyStringCode.replace(/command/g, 'ctrl').replace('ctrl+ctrl', 'ctrl'), event);
+var
+    // 围绕X轴旋转
+    _rotateX = function (deg, x, y, z) {
+        var cos = Math.cos(deg), sin = Math.sin(deg);
+        return [x, y * cos - z * sin, y * sin + z * cos];
+    },
+    // 围绕Y轴旋转
+    _rotateY = function (deg, x, y, z) {
+        var cos = Math.cos(deg), sin = Math.sin(deg);
+        return [z * sin + x * cos, y, z * cos - x * sin];
+    },
+    // 围绕Z轴旋转
+    _rotateZ = function (deg, x, y, z) {
+        var cos = Math.cos(deg), sin = Math.sin(deg);
+        return [x * cos - y * sin, x * sin + y * cos, z];
     };
 
-    var doKeyup = function (event) {
-        var keyStringCode = keyCode(event);
-        if (/command/.test(keyStringCode)) macCommand = false;
+var p = [];
+
+/*
+config = {
+    // 缩放比例
+    scale: 1,
+
+    // 投影中心经纬度
+    center: [107, 36]
+} 
+*/
+__pkg__scope_bundle__.default= function (config) {
+
+    if (!('scale' in config)) config.scale = 1;
+    if (!('center' in config)) config.center = [107, 36];
+
+    return function (longitude, latitude) {
+        /**
+         * 通过旋转的方法
+         * 先旋转出点的位置
+         * 然后根据把地心到旋转中心的这条射线变成OZ这条射线的变换应用到初始化点上
+         * 这样求的的点的x,y就是最终结果
+         *
+         *  计算过程：
+         *  1.初始化点的位置是p（x,0,0）,其中x的值是地球半径除以缩放倍速
+         *  2.根据点的纬度对p进行旋转，旋转后得到的p的坐标纬度就是目标纬度
+         *  3.同样的对此刻的p进行经度的旋转，这样就获取了极点作为中心点的坐标
+         *  4.接着想象一下为了让旋转中心移动到极点需要进行旋转的经纬度是多少，记为lo和la
+         *  5.然后再对p进行经度度旋转lo获得新的p
+         *  6.然后再对p进行纬度旋转la获得新的p
+         *  7.旋转结束
+         *
+         * 特别注意：第5和第6步顺序一定不可以调换，原因来自经纬度定义上
+         * 【除了经度为0的位置，不然纬度的旋转会改变原来的经度值，反过来不会】
+         *
+         */
+        p = _rotateY((360 - latitude) / 180 * Math.PI, 100 * config.scale, 0, 0);
+        p = _rotateZ(longitude / 180 * Math.PI, p[0], p[1], p[2]);
+        p = _rotateZ((90 - config.center[0]) / 180 * Math.PI, p[0], p[1], p[2]);
+        p = _rotateX((90 - config.center[1]) / 180 * Math.PI, p[0], p[1], p[2]);
+
+        return [
+            -p[0], // 加-号是因为浏览器坐标和地图不一样
+            p[1],
+            p[2]
+        ];
     };
+};
 
-    // 在body上注册
-    document.body.addEventListener('keydown', doKeydown, false);
-    document.body.addEventListener('keyup', doKeyup, false);
 
-    // 返回取消监听函数
-    return function () {
-        document.body.removeEventListener('keydown', doKeydown, false);
-        document.body.removeEventListener('keyup', doKeyup, false);
+    return __pkg__scope_bundle__;
+}
+
+/*************************** [bundle] ****************************/
+// Original file:./src/tool/map/drawGeometry
+/*****************************************************************/
+window.__pkg__bundleSrc__['212']=function(){
+    var __pkg__scope_bundle__={};
+    var __pkg__scope_args__;
+    __pkg__scope_args__=window.__pkg__getBundle('213');
+var drawPolygon =__pkg__scope_args__.default;
+
+
+__pkg__scope_bundle__.default= function (map, painter, cx, cy, geometry) {
+    var i, j;
+
+    if (geometry.type == 'Polygon') {
+        for (j = 0; j < geometry.coordinates.length; j++) {
+            drawPolygon(map, painter, cx, cy, geometry.coordinates[j]);
+            painter.closePath().full();
+        }
+    } else if (geometry.type == 'MultiLineString') {
+        for (j = 0; j < geometry.coordinates.length; j++) {
+            drawPolygon(map, painter, cx, cy, geometry.coordinates[j]);
+            painter.stroke();
+        }
+    } else if (geometry.type == 'MultiPolygon') {
+        for (i = 0; i < geometry.coordinates.length; i++) {
+            for (j = 0; j < geometry.coordinates[i].length; j++) {
+                drawPolygon(map, painter, cx, cy, geometry.coordinates[i][j]);
+                painter.closePath().full();
+            }
+        }
+    } else {
+        throw new Error('不支持的几何类型：' + geometry.type);
+    }
+};
+
+    return __pkg__scope_bundle__;
+}
+
+/*************************** [bundle] ****************************/
+// Original file:./src/tool/map/drawPolygon
+/*****************************************************************/
+window.__pkg__bundleSrc__['213']=function(){
+    var __pkg__scope_bundle__={};
+    var __pkg__scope_args__;
+    __pkg__scope_bundle__.default= function (map, painter, cx, cy, coordinates) {
+    var i, dxy;
+
+    painter.beginPath();
+    for (i = 0; i < coordinates.length; i++) {
+        dxy = map(coordinates[i][0], coordinates[i][1]);
+        painter.lineTo(cx + dxy[0], cy + dxy[1]);
     }
 };
 

@@ -19,7 +19,7 @@ __pkg__scope_args__=window.__pkg__getBundle('288');
 var rotate =__pkg__scope_args__.default;
 
 
-var stop;
+var stop = function () { };
 __pkg__scope_bundle__.default= function (obj, props) {
 
     return {
@@ -36,7 +36,7 @@ __pkg__scope_bundle__.default= function (obj, props) {
             // 进度条
             var rate = 0.73;
 
-            painter.appendEl("circle")
+            painter
 
                 // 绘制三个背景圆
                 .config({
@@ -56,26 +56,26 @@ __pkg__scope_bundle__.default= function (obj, props) {
 
             // 绘制三行文字
             painter.config({
-                'font-size': 40,
+                'fontSize': 40,
                 'fillStyle': '#272727',
                 'textAlign': 'center'
             })
                 .appendEl("text").fillText('￥100,000', 250, 210)
                 .config({
-                    'font-size': 30,
+                    'fontSize': 30,
                     'fillStyle': '#595757'
                 })
                 .appendEl("text").fillText('可借', 250, 160)
                 .config({
-                    'font-size': 24,
+                    'fontSize': 24,
                     'fillStyle': '#a4a1a1'
                 })
                 .appendEl("text").fillText('总额度150,000', 250, 260);
 
             // 配置进度条
             arcNode.config({
-                'arc-start-cap': 'round',
-                'arc-end-cap': 'round',
+                'arcStartCap': 'round',
+                'arcEndCap': 'round',
                 'fillStyle': '#ff7f08'
             });
 
@@ -83,7 +83,7 @@ __pkg__scope_bundle__.default= function (obj, props) {
             animation(function (deep) {
 
                 // 根据当前进度deep更新弧形进度
-                arcNode.fillArc(250, 250, 180, 200, -Math.PI / 2, -Math.PI * 2 * (1 - rate) * deep);
+                arcNode.fillArc(250, 250, 180, 200, -90, -360 * (1 - rate) * deep);
 
                 // 初始化wave
                 _this.fullWave(rate * deep, deep, innerWave, outerWave);
@@ -165,7 +165,7 @@ __pkg__scope_bundle__.default= function (obj, props) {
                     .moveTo(beginPoint[0], beginPoint[1])
 
                     // 绘制半圆部分
-                    .arc(250, 250, 160, (0.5 - rate) * Math.PI, 2 * rate * Math.PI)
+                    .arc(250, 250, 160, (0.5 - rate) * 180, 2 * rate * 180)
 
                     // 绘制波浪部分
                     .bezierCurveTo(
@@ -245,12 +245,12 @@ __pkg__scope_bundle__.default= function (svg) {
         "textBaseline": "middle",
 
         // 文字设置
-        "font-size": 16,
-        "font-family": "sans-serif",
+        "fontSize": 16,
+        "fontFamily": "sans-serif",
 
         // arc二端闭合方式['butt':直线闭合,'round':圆帽闭合]
-        "arc-start-cap": "butt",
-        "arc-end-cap": "butt",
+        "arcStartCap": "butt",
+        "arcEndCap": "butt",
 
         // 虚线设置
         "lineDash": []
@@ -465,10 +465,8 @@ __pkg__scope_bundle__.default= function (svg) {
         },
 
         arc: function (x, y, r, beginDeg, deg) {
-            var begPosition = rotate(x, y, beginDeg, x + r, y);
-            var endPosition = rotate(x, y, beginDeg + deg, x + r, y);
-            beginDeg = beginDeg / Math.PI * 180;
-            deg = deg / Math.PI * 180;
+            var begPosition = rotate(x, y, beginDeg / 180 * Math.PI, x + r, y);
+            var endPosition = rotate(x, y, (beginDeg + deg) / 180 * Math.PI, x + r, y);
             // 如果当前没有路径，说明是开始的，就移动到正确位置
             if (path == '') {
                 path += "M" + begPosition[0] + "," + begPosition[1];
@@ -523,9 +521,9 @@ __pkg__scope_bundle__.initText = function (el, config, x, y, deg) {
 
     // 垂直对齐采用dy实现
     setAttribute(el, "dy", {
-        "top": config['font-size'] * 0.5,
+        "top": config.fontSize * 0.5,
         "middle": 0,
-        "bottom": -config['font-size'] * 0.5,
+        "bottom": -config.fontSize * 0.5,
     }[config.textBaseline]);
 
     setStyle(el, {
@@ -539,8 +537,8 @@ __pkg__scope_bundle__.initText = function (el, config, x, y, deg) {
         "dominant-baseline": "central",
 
         // 文字大小和字体设置
-        "font-size": config['font-size'] + "px",
-        "font-family": config['font-family']
+        "font-size": config.fontSize + "px",
+        "font-family": config.fontFamily
     });
 
     // 位置
@@ -587,6 +585,9 @@ __pkg__scope_bundle__.initArc = function (el, config, cx, cy, r1, r2, beginDeg, 
 
     if (el.nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
 
+    beginDeg = (beginDeg / 180) * Math.PI;
+    deg = (deg / 180) * Math.PI;
+
     beginDeg = beginDeg % (Math.PI * 2);
 
     if (r1 > r2) {
@@ -619,23 +620,23 @@ __pkg__scope_bundle__.initArc = function (el, config, cx, cy, r1, r2, beginDeg, 
             "A" + r1 + " " + r1 + " 0 " + f + " 1 " + endInnerX + " " + endInnerY;
 
         // 结尾
-        if (config["arc-end-cap"] == 'round')
+        if (config.arcEndCap == 'round')
             d += "A" + r + " " + r + " " + " 0 1 0 " + endOuterX + " " + endOuterY;
-        else if (config["arc-end-cap"] == '-round')
+        else if (config.arcEndCap == '-round')
             d += "A" + r + " " + r + " " + " 0 1 1 " + endOuterX + " " + endOuterY;
         else
             d += "L" + endOuterX + " " + endOuterY;
         d += "A" + r2 + " " + r2 + " 0 " + f + " 0 " + begOuterX + " " + begOuterY;
 
         // 开头
-        if (config["arc-start-cap"] == 'round')
+        if (config.arcStartCap == 'round')
             d += "A" + r + " " + r + " " + " 0 1 0 " + begInnerX + " " + begInnerY;
-        else if (config["arc-start-cap"] == '-round')
+        else if (config.arcStartCap == '-round')
             d += "A" + r + " " + r + " " + " 0 1 1 " + begInnerX + " " + begInnerY;
         else
             d += "L" + begInnerX + " " + begInnerY;
 
-        if (config["arc-start-cap"] == 'butt') d += "Z";
+        if (config.arcStartCap == 'butt') d += "Z";
 
         setAttribute(el, 'd', d);
     });

@@ -6,7 +6,7 @@ import webglRender from '../../tool/webgl/index';
 import Matrix4 from '../../tool/Matrix4/index';
 import viewHandler from '../../tool/viewHandler';
 
-import { mainView, directiveView } from './initModelValue';
+import { mainView, axios } from './initModelValue';
 
 // 着色器
 import vertexShader from './shader-vertex.c';
@@ -131,7 +131,7 @@ export default function (obj) {
             updateView: function (drawAxis) {
 
                 //  当前缩放率
-                var rateScale = 1.4;
+                var rateScale = 5;
 
                 // 创建3d对象
                 var webgl = webglRender(this._refs.mainView.value);
@@ -174,27 +174,18 @@ export default function (obj) {
 
                     // 一个个绘制
                     for (var index = 0; index < modelValue.length; index++) {
-                        var itemValue = modelValue[index].value;
+                        var itemValue = modelValue[index];
 
-                        // 内置默认类型
-                        if (modelValue[index].type == 'default') {
+                        // 设置颜色
+                        webgl.setUniform4f('u_color', itemValue.material.color.r, itemValue.material.color.g, itemValue.material.color.b, 1);
 
-                            // 设置颜色
-                            webgl.setUniform4f('u_color', itemValue.color[0], itemValue.color[1], itemValue.color[2], itemValue.color[3]);
+                        // 缓冲区写入数据并分配
+                        buffer.write(new Float32Array(itemValue.geometry.attributes.position.array)).use('a_position', 3, 3, 0);
 
-                            // 缓冲区写入数据并分配
-                            buffer.write(new Float32Array(itemValue.points)).use('a_position', 3, 3, 0);
-
-                            // 绘制
-                            // 先不考虑索引画笔的情况，后续需要再扩展
-                            painter[itemValue.method](0, itemValue.points.length / 3);
-
-                        }
-
-                        // 未知类型
-                        else {
-                            alert('未知数据类型：' + modelValue[index].type);
-                        }
+                        // 绘制
+                        painter[{
+                            "LINES": "lines"
+                        }[itemValue.geometry.type]](0, itemValue.geometry.attributes.position.count);
 
                     }
                 };
@@ -240,12 +231,14 @@ export default function (obj) {
 
             // 绘制刻度尺图标
             renderAxisView: function () {
-                var webgl = webglRender(this._refs.directiveView.value);
+                var webgl = webglRender(this._refs.axios.value);
                 webgl.shader(vertexShader, fragmentShader);
                 var buffer = webgl.buffer();
                 var painter = webgl.painter().openDeep();
 
-                var axisValue = directiveView();
+                webgl.updateScale(3);
+
+                var axisValue = axios();
 
                 // 返回绘制方法由主流程控制
                 return function (matrix) {

@@ -90,13 +90,13 @@ __pkg__scope_bundle__.default= function (obj, props) {
                     // 绘制标题
                     painter.config({
                         "textAlign": "center",
-                        "font-size": 20,
-                        "font-weight": 600
+                        "fontSize": 20,
+                        "fontWeight": 600
 
                     }).fillText("Referer of a Website", cx, 30)
                         .config({
-                            "font-weight": 200,
-                            "font-size": 12
+                            "fontWeight": 200,
+                            "fontSize": 12
                         }).fillText("Fake Data", cx, 60);
 
                     // legend提示
@@ -655,22 +655,22 @@ __pkg__scope_bundle__.default= function (canvas, width, height, opts) {
     var config = {
 
         // 文字大小
-        "font-size": 16,
+        "fontSize": 16,
 
         // 字体
-        "font-family": "sans-serif",
+        "fontFamily": "sans-serif",
 
         // 字重
-        "font-weight": 400,
+        "fontWeight": 400,
 
         // 字类型
-        "font-style": "normal",
+        "fontStyle": "normal",
 
         // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合）
-        "arc-start-cap": 'butt',
+        "arcStartCap": 'butt',
 
         // 圆弧结束端闭合方式，和上一个类似
-        "arc-end-cap": 'butt',
+        "arcWndCap": 'butt',
     };
 
     // 配置生效方法
@@ -942,7 +942,7 @@ __pkg__scope_bundle__.initText = function (painter, config, x, y, deg) {
     painter.beginPath();
     painter.translate(x, y);
     painter.rotate(deg);
-    painter.font = config['font-style'] + " " + config["font-weight"] + " " + config['font-size'] + "px " + config['font-family'];
+    painter.font = config.fontStyle + " " + config.fontWeight + " " + config.fontSize + "px " + config.fontFamily;
     return painter;
 };
 
@@ -980,18 +980,18 @@ __pkg__scope_bundle__.initArc = function (painter, config, cx, cy, r1, r2, begin
             // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
             cx, cy, r1, beginA, endA, false);
         // 结尾
-        if (config["arc-end-cap"] != 'round')
+        if (config.arcEndCap != 'round')
             painter.lineTo(endOuterX, endOuterY);
         else
             painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
         painter.arc(cx, cy, r2, endA, beginA, true);
         // 开头
-        if (config["arc-start-cap"] != 'round')
+        if (config.arcStartCap != 'round')
             painter.lineTo(begInnerX, begInnerY);
         else
             painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
     });
-    if (config["arc-start-cap"] == 'butt') painter.closePath();
+    if (config.arcStartCap == 'butt') painter.closePath();
     return painter;
 };
 

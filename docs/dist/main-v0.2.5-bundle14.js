@@ -70,7 +70,7 @@ __pkg__scope_bundle__.default= function (obj) {
                 // 获取画笔并进行初始化
                 var painter = canvasRender(canvas).config({
                     textAlign: "center",
-                    "font-family": "sans-serif"
+                    "fontFamily": "sans-serif"
                 });
 
                 // 绘制
@@ -113,7 +113,7 @@ window.__pkg__bundleSrc__['119']=function(){
     var __pkg__scope_args__;
     var styleElement = document.createElement('style');
 var head = document.head || document.getElementsByTagName('head')[0];
-styleElement.innerHTML = "\n [page-view=\"regexper-visualization\"]{\n\npadding-bottom: 20px;\n\nwidth: 800px;\n\nleft: calc(50vw - 400px);\n\ntop: 50px;\n\n}\n\n [page-view=\"regexper-visualization\"][focus=\"no\"]>header{\n\nbackground-color: #646125;\n\n}\n\n [page-view=\"regexper-visualization\"]>header{\n\ntext-align: left;\n\nline-height: 50px;\n\nbackground-color: #595616;\n\nmargin-bottom: 30px;\n\n}\n\n [page-view=\"regexper-visualization\"]>header>h2{\n\ncolor: #98932e;\n\nfont-size: 20px;\n\npadding-left: 50px;\n\nbackground-image: url(\"./regexper-visualization.png\");\n\nbackground-position: 10px center;\n\nbackground-repeat: no-repeat;\n\nbackground-size: auto 60%;\n\nfont-family: cursive;\n\ndisplay: inline-block;\n\n}\n\n [page-view=\"regexper-visualization\"]>div.help-hidden{\n\nposition: fixed;\n\nfont-size: 12px;\n\nfont-family: sans-serif;\n\npadding: 0;\n\nborder: none;\n\nbottom: -100px;\n\n}\n\n [page-view=\"regexper-visualization\"]{\n\ntext-align: center;\n\n}\n\n [page-view=\"regexper-visualization\"] input[type=\"text\"]{\n\nwidth: 700px;\n\nheight: 30px;\n\npadding: 0 10px;\n\n}\n\n [page-view=\"regexper-visualization\"] button{\n\nheight: 30px;\n\nmargin-left: 10px;\n\nbackground-color: #97932e;\n\ncolor: #fefefe;\n\ncursor: pointer;\n\n}\n\n [page-view=\"regexper-visualization\"] canvas{\n\nbackground-color: white;\n\n}\n\n [page-view=\"regexper-visualization\"] hr{\n\nmargin: 20px 0;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString{\n\nmargin-top: 10px;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString input{\n\nvertical-align: sub;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString span{\n\ndisplay: inline-block;\n\nwidth: 20px;\n\n}\n";
+styleElement.innerHTML = "\n [page-view=\"regexper-visualization\"]{\n\npadding-bottom: 20px;\n\nwidth: 800px;\n\nleft: calc(50vw - 400px);\n\ntop: 50px;\n\n}\n\n [page-view=\"regexper-visualization\"][focus=\"no\"]>header{\n\nbackground-color: #646125;\n\n}\n\n [page-view=\"regexper-visualization\"]>header{\n\ntext-align: left;\n\nline-height: 50px;\n\nbackground-color: #595616;\n\nmargin-bottom: 30px;\n\n}\n\n [page-view=\"regexper-visualization\"]>header>h2{\n\ncolor: #98932e;\n\nfont-size: 20px;\n\npadding-left: 50px;\n\nbackground-image: url(\"./regexper-visualization.png\");\n\nbackground-position: 10px center;\n\nbackground-repeat: no-repeat;\n\nbackground-size: auto 60%;\n\nfont-family: cursive;\n\ndisplay: inline-block;\n\n}\n\n [page-view=\"regexper-visualization\"]>div.help-hidden{\n\nposition: fixed;\n\nfont-size: 12px;\n\nfont-family: sans-serif;\n\npadding: 0;\n\nborder: none;\n\nbottom: -100px;\n\n}\n\n [page-view=\"regexper-visualization\"]{\n\ntext-align: center;\n\n}\n\n [page-view=\"regexper-visualization\"] input[type=\"text\"]{\n\nwidth: 700px;\n\nheight: 30px;\n\npadding: 0 10px;\n\n}\n\n [page-view=\"regexper-visualization\"]>button{\n\nheight: 30px;\n\nmargin-left: 10px;\n\nbackground-color: #97932e;\n\ncolor: #fefefe;\n\ncursor: pointer;\n\n}\n\n [page-view=\"regexper-visualization\"] canvas{\n\nbackground-color: white;\n\n}\n\n [page-view=\"regexper-visualization\"] hr{\n\nmargin: 20px 0;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString{\n\nmargin-top: 10px;\n\nfont-size: 12px;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString input{\n\nvertical-align: sub;\n\n}\n\n [page-view=\"regexper-visualization\"] .isString span{\n\ndisplay: inline-block;\n\nwidth: 20px;\n\n}\n";
 styleElement.setAttribute('type', 'text/css');head.appendChild(styleElement);
 
     return __pkg__scope_bundle__;
@@ -755,7 +755,7 @@ var normalConfig = {
     'strokeStyle': '#000000',
     'lineDash': [],
     'lineWidth': 2,
-    "font-size": 12
+    "fontSize": 12
 };
 
 __pkg__scope_bundle__.default= function drawImage(painter, imageData, left, top) {
@@ -767,7 +767,7 @@ __pkg__scope_bundle__.default= function drawImage(painter, imageData, left, top)
             'strokeStyle': 'red',
             'lineDash': [2],
             'lineWidth': 1,
-            'font-size': 10
+            'fontSize': 10
         })
             .strokeRect(left + 5, top + 5, imageData.width - 10, imageData.height - 10)
 
@@ -865,7 +865,7 @@ __pkg__scope_bundle__.default= function drawImage(painter, imageData, left, top)
 
                     painter.config({
                         'fillStyle': 'gray',
-                        'font-size': 10
+                        'fontSize': 10
                     })
                         // 提示文字
                         .fillText(purview, _left + _helpWidth + colItem.width * 0.5, _top + colItem.height + _helpHeight - 5);
@@ -1039,22 +1039,22 @@ __pkg__scope_bundle__.default= function (canvas, width, height, opts) {
     var config = {
 
         // 文字大小
-        "font-size": 16,
+        "fontSize": 16,
 
         // 字体
-        "font-family": "sans-serif",
+        "fontFamily": "sans-serif",
 
         // 字重
-        "font-weight": 400,
+        "fontWeight": 400,
 
         // 字类型
-        "font-style": "normal",
+        "fontStyle": "normal",
 
         // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合）
-        "arc-start-cap": 'butt',
+        "arcStartCap": 'butt',
 
         // 圆弧结束端闭合方式，和上一个类似
-        "arc-end-cap": 'butt',
+        "arcWndCap": 'butt',
     };
 
     // 配置生效方法
@@ -1326,7 +1326,7 @@ __pkg__scope_bundle__.initText = function (painter, config, x, y, deg) {
     painter.beginPath();
     painter.translate(x, y);
     painter.rotate(deg);
-    painter.font = config['font-style'] + " " + config["font-weight"] + " " + config['font-size'] + "px " + config['font-family'];
+    painter.font = config.fontStyle + " " + config.fontWeight + " " + config.fontSize + "px " + config.fontFamily;
     return painter;
 };
 
@@ -1364,18 +1364,18 @@ __pkg__scope_bundle__.initArc = function (painter, config, cx, cy, r1, r2, begin
             // (圆心x，圆心y，半径，开始角度，结束角度，true逆时针/false顺时针)
             cx, cy, r1, beginA, endA, false);
         // 结尾
-        if (config["arc-end-cap"] != 'round')
+        if (config.arcEndCap != 'round')
             painter.lineTo(endOuterX, endOuterY);
         else
             painter.arc((endInnerX + endOuterX) * 0.5, (endInnerY + endOuterY) * 0.5, r, endA - Math.PI, endA, true);
         painter.arc(cx, cy, r2, endA, beginA, true);
         // 开头
-        if (config["arc-start-cap"] != 'round')
+        if (config.arcStartCap != 'round')
             painter.lineTo(begInnerX, begInnerY);
         else
             painter.arc((begInnerX + begOuterX) * 0.5, (begInnerY + begOuterY) * 0.5, r, beginA, beginA - Math.PI, true);
     });
-    if (config["arc-start-cap"] == 'butt') painter.closePath();
+    if (config.arcStartCap == 'butt') painter.closePath();
     return painter;
 };
 

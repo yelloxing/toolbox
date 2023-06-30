@@ -26,7 +26,7 @@ var viewHandler =__pkg__scope_args__.default;
 
 __pkg__scope_args__=window.__pkg__getBundle('190');
 var mainView=__pkg__scope_args__.mainView;
-var directiveView=__pkg__scope_args__.directiveView;
+var axios=__pkg__scope_args__.axios;
 
 
 // 着色器
@@ -156,7 +156,7 @@ __pkg__scope_bundle__.default= function (obj) {
             updateView: function (drawAxis) {
 
                 //  当前缩放率
-                var rateScale = 1.4;
+                var rateScale = 5;
 
                 // 创建3d对象
                 var webgl = webglRender(this._refs.mainView.value);
@@ -199,27 +199,18 @@ __pkg__scope_bundle__.default= function (obj) {
 
                     // 一个个绘制
                     for (var index = 0; index < modelValue.length; index++) {
-                        var itemValue = modelValue[index].value;
+                        var itemValue = modelValue[index];
 
-                        // 内置默认类型
-                        if (modelValue[index].type == 'default') {
+                        // 设置颜色
+                        webgl.setUniform4f('u_color', itemValue.material.color.r, itemValue.material.color.g, itemValue.material.color.b, 1);
 
-                            // 设置颜色
-                            webgl.setUniform4f('u_color', itemValue.color[0], itemValue.color[1], itemValue.color[2], itemValue.color[3]);
+                        // 缓冲区写入数据并分配
+                        buffer.write(new Float32Array(itemValue.geometry.attributes.position.array)).use('a_position', 3, 3, 0);
 
-                            // 缓冲区写入数据并分配
-                            buffer.write(new Float32Array(itemValue.points)).use('a_position', 3, 3, 0);
-
-                            // 绘制
-                            // 先不考虑索引画笔的情况，后续需要再扩展
-                            painter[itemValue.method](0, itemValue.points.length / 3);
-
-                        }
-
-                        // 未知类型
-                        else {
-                            alert('未知数据类型：' + modelValue[index].type);
-                        }
+                        // 绘制
+                        painter[{
+                            "LINES": "lines"
+                        }[itemValue.geometry.type]](0, itemValue.geometry.attributes.position.count);
 
                     }
                 };
@@ -265,12 +256,14 @@ __pkg__scope_bundle__.default= function (obj) {
 
             // 绘制刻度尺图标
             renderAxisView: function () {
-                var webgl = webglRender(this._refs.directiveView.value);
+                var webgl = webglRender(this._refs.axios.value);
                 webgl.shader(vertexShader, fragmentShader);
                 var buffer = webgl.buffer();
                 var painter = webgl.painter().openDeep();
 
-                var axisValue = directiveView();
+                webgl.updateScale(3);
+
+                var axisValue = axios();
 
                 // 返回绘制方法由主流程控制
                 return function (matrix) {
@@ -300,7 +293,7 @@ __pkg__scope_bundle__.default= function (obj) {
 window.__pkg__bundleSrc__['175']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,19,21,23]},{"type":"tag","name":"div","attrs":{"class":"menu","ui-dragdrop:desktop":""},"childNodes":[2,4,6,12,14]},{"type":"tag","name":"h2","attrs":{},"childNodes":[3]},{"type":"text","content":"3D模型编辑器","childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-on:click":"resetEditor"},"childNodes":[5]},{"type":"text","content":"新建","childNodes":[]},{"type":"tag","name":"span","attrs":{"class":"more"},"childNodes":[7,8]},{"type":"text","content":"导入","childNodes":[]},{"type":"tag","name":"div","attrs":{},"childNodes":[9]},{"type":"tag","name":"span","attrs":{},"childNodes":[10]},{"type":"tag","name":"label","attrs":{"ui-on:click":"triggleFile"},"childNodes":[11]},{"type":"text","content":"本地选择","childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-on:click":"exportFile"},"childNodes":[13]},{"type":"text","content":"导出","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[15,17]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[16]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[18]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"content","ref":"mainViewRoot"},"childNodes":[20]},{"type":"tag","name":"canvas","attrs":{"ui-bind:width":"width","ui-bind:height":"height","ref":"mainView"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"axis"},"childNodes":[22]},{"type":"tag","name":"canvas","attrs":{"width":"100","height":"100","ref":"directiveView"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"no-view"},"childNodes":[24]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"file","multiple":"","ui-on:change":"inputLocalFile","accept":".json,.stl,.obj,.fbx,.mtl,.ply,.gltf,.mod"},"childNodes":[]}]
+    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,19,21,23]},{"type":"tag","name":"div","attrs":{"class":"menu","ui-dragdrop:desktop":""},"childNodes":[2,4,6,12,14]},{"type":"tag","name":"h2","attrs":{},"childNodes":[3]},{"type":"text","content":"3D模型编辑器","childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-on:click":"resetEditor"},"childNodes":[5]},{"type":"text","content":"新建","childNodes":[]},{"type":"tag","name":"span","attrs":{"class":"more"},"childNodes":[7,8]},{"type":"text","content":"导入","childNodes":[]},{"type":"tag","name":"div","attrs":{},"childNodes":[9]},{"type":"tag","name":"span","attrs":{},"childNodes":[10]},{"type":"tag","name":"label","attrs":{"ui-on:click":"triggleFile"},"childNodes":[11]},{"type":"text","content":"本地选择","childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-on:click":"exportFile"},"childNodes":[13]},{"type":"text","content":"导出","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"win-btns"},"childNodes":[15,17]},{"type":"tag","name":"button","attrs":{"class":"min","ui-on:click.stop":"$minView"},"childNodes":[16]},{"type":"text","content":"最小化","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"close","ui-on:click.stop":"$closeView"},"childNodes":[18]},{"type":"text","content":"关闭","childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"content","ref":"mainViewRoot"},"childNodes":[20]},{"type":"tag","name":"canvas","attrs":{"ui-bind:width":"width","ui-bind:height":"height","ref":"mainView"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"axis"},"childNodes":[22]},{"type":"tag","name":"canvas","attrs":{"width":"100","height":"100","ref":"axios"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"no-view"},"childNodes":[24]},{"type":"tag","name":"input","attrs":{"type":"file","ref":"file","multiple":"","ui-on:change":"inputLocalFile","accept":".json,.stl,.obj,.fbx,.mtl,.ply,.gltf,.mod"},"childNodes":[]}]
 
     return __pkg__scope_bundle__;
 }
@@ -497,8 +490,9 @@ __pkg__scope_bundle__.default= function (node, opts) {
                 // 创建纹理
                 var texture = initTexture(gl, type, unit, _type_);
 
-                // 配置纹理（默认配置）
+                // 配置纹理
                 gl.texParameteri(type, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                gl.texParameteri(type, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
                 gl.texParameteri(type, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(type, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -1577,18 +1571,40 @@ window.__pkg__bundleSrc__['190']=function(){
 __pkg__scope_bundle__.mainView = function () {
 
     var modelValue = [{
-        type: "default",
-        value: {
-            color: [0.5, 0.5, 0.5, 1],
-            method: "lines",
-            points: []
+        geometry: {
+            attributes: {
+                position: {
+                    array: [],
+                    count: 0,
+                    itemSize: 3
+                }
+            },
+            type: "LINES"
+        },
+        material: {
+            color: {
+                r: 0.5,
+                g: 0.5,
+                b: 0.5
+            }
         }
     }, {
-        type: "default",
-        value: {
-            color: [0.8, 0.8, 0.8, 1],
-            method: "lines",
-            points: []
+        geometry: {
+            attributes: {
+                position: {
+                    array: [],
+                    count: 0,
+                    itemSize: 3
+                }
+            },
+            type: "LINES"
+        },
+        material: {
+            color: {
+                r: 0.8,
+                g: 0.8,
+                b: 0.8
+            }
         }
     }];
 
@@ -1596,7 +1612,7 @@ __pkg__scope_bundle__.mainView = function () {
 
         // 深色线
         if (i % 5 == 0) {
-            modelValue[0].value.points.push(
+            modelValue[0].geometry.attributes.position.array.push(
 
                 // 横
                 // [-1,0,-1+(2/25)*i]
@@ -1611,7 +1627,7 @@ __pkg__scope_bundle__.mainView = function () {
 
         // 浅色线
         else {
-            modelValue[1].value.points.push(
+            modelValue[1].geometry.attributes.position.array.push(
                 -1, 0, 0.08 * i - 1,
                 1, 0, 0.08 * i - 1,
                 0.08 * i - 1, 0, -1,
@@ -1621,11 +1637,14 @@ __pkg__scope_bundle__.mainView = function () {
 
     }
 
+    modelValue[0].geometry.attributes.position.count = modelValue[0].geometry.attributes.position.array.length / 3;
+    modelValue[1].geometry.attributes.position.count = modelValue[1].geometry.attributes.position.array.length / 3;
+
     return modelValue;
 };
 
 // 方向图标
-__pkg__scope_bundle__.directiveView = function () {
+__pkg__scope_bundle__.axios = function () {
 
     return [
 
@@ -1701,7 +1720,7 @@ __pkg__scope_bundle__.directiveView = function () {
 window.__pkg__bundleSrc__['191']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_bundle__.default= "attribute vec4 a_position;\r\nuniform mat4 u_matrix;\r\n\r\nvoid main()\r\n{\r\n    vec4 temp = u_matrix * a_position;\r\n\r\n    // 表示眼睛距离vec4(0.0,0.0,1.0)的距离\r\n    float dist = 1.0;\r\n\r\n    // 使用投影直接计算\r\n    gl_Position = vec4((dist + 1.0) * temp.x / (dist + temp.z), (dist + 1.0) * temp.y / (dist + temp.z), temp.z, 1.0);\r\n\r\n}\r\n"
+    __pkg__scope_bundle__.default= "attribute vec4 a_position;\r\nuniform mat4 u_matrix;\r\n\r\nvoid main()\r\n{\r\n    vec4 temp =  u_matrix * a_position;\r\n\r\n    // 表示眼睛距离vec4(0.0,0.0,1.0)的距离\r\n    float dist = 4.0;\r\n\r\n    // 使用投影直接计算\r\n    gl_Position = vec4((dist + 1.0) * temp.x, (dist + 1.0) * temp.y, dist * (dist + temp.z) + 1.0 - dist * dist, temp.w * 2.0 * (dist + temp.z));\r\n}\r\n"
 
     return __pkg__scope_bundle__;
 }

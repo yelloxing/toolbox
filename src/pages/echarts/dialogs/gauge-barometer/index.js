@@ -6,7 +6,7 @@ import canvasRender from '../../../../tool/canvas/index';
 import drawPolarRuler from '../../../../tool/canvas/extend/polar-ruler';
 import rotate from "../../../../tool/transform/rotate";
 
-var interval, stop;
+var interval, stop = function () { };
 export default function (obj, props) {
 
     return {
@@ -81,8 +81,8 @@ export default function (obj, props) {
 
                     // 表盘文字
                     painter.config({
-                        "font-size": 14,
-                        "font-weight": 200,
+                        "fontSize": 14,
+                        "fontWeight": 200,
                         "fillStyle": "black",
                         "textAlign": "center",
                         "textBaseline": "middle"
@@ -102,8 +102,8 @@ export default function (obj, props) {
 
                         // 值文字
                         .config({
-                            "font-size": 34,
-                            "font-weight": 800,
+                            "fontSize": 34,
+                            "fontWeight": 800,
                             "fillStyle": "#555555"
                         })
                         .fillText(value, cx, cy + radius * 0.4);

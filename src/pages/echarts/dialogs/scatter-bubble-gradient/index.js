@@ -162,8 +162,8 @@ export default function (obj, props) {
                     // 绘制标题
                     painter.config({
                         "fillStyle": "black",
-                        "font-size": 18,
-                        "font-weight": 800,
+                        "fontSize": 18,
+                        "fontWeight": 800,
                         "textAlign": "left"
                     }).fillText("Life Expectancy and GDP by Country", 40, 30);
 
@@ -225,7 +225,7 @@ export default function (obj, props) {
                         "textAlign": "center",
                         "fillStyle": "black",
                         shadowBlur: 0,
-                        "font-weight": 200
+                        "fontWeight": 200
                     });
                     if (hover && Array.isArray(hover)) {
 
@@ -244,7 +244,7 @@ export default function (obj, props) {
 
                         painter.setRegion(i + "").config({
                             "textAlign": "left",
-                            "font-weight": 800,
+                            "fontWeight": 800,
                             "fillStyle": "black"
                         })
 

@@ -9,9 +9,9 @@ export var initText = function (el, config, x, y, deg) {
 
     // 垂直对齐采用dy实现
     setAttribute(el, "dy", {
-        "top": config['font-size'] * 0.5,
+        "top": config.fontSize * 0.5,
         "middle": 0,
-        "bottom": -config['font-size'] * 0.5,
+        "bottom": -config.fontSize * 0.5,
     }[config.textBaseline]);
 
     setStyle(el, {
@@ -25,8 +25,8 @@ export var initText = function (el, config, x, y, deg) {
         "dominant-baseline": "central",
 
         // 文字大小和字体设置
-        "font-size": config['font-size'] + "px",
-        "font-family": config['font-family']
+        "font-size": config.fontSize + "px",
+        "font-family": config.fontFamily
     });
 
     // 位置
@@ -73,6 +73,9 @@ export var initArc = function (el, config, cx, cy, r1, r2, beginDeg, deg) {
 
     if (el.nodeName.toLowerCase() !== 'path') throw new Error('Need a <path> !');
 
+    beginDeg = (beginDeg / 180) * Math.PI;
+    deg = (deg / 180) * Math.PI;
+
     beginDeg = beginDeg % (Math.PI * 2);
 
     if (r1 > r2) {
@@ -105,23 +108,23 @@ export var initArc = function (el, config, cx, cy, r1, r2, beginDeg, deg) {
             "A" + r1 + " " + r1 + " 0 " + f + " 1 " + endInnerX + " " + endInnerY;
 
         // 结尾
-        if (config["arc-end-cap"] == 'round')
+        if (config.arcEndCap == 'round')
             d += "A" + r + " " + r + " " + " 0 1 0 " + endOuterX + " " + endOuterY;
-        else if (config["arc-end-cap"] == '-round')
+        else if (config.arcEndCap == '-round')
             d += "A" + r + " " + r + " " + " 0 1 1 " + endOuterX + " " + endOuterY;
         else
             d += "L" + endOuterX + " " + endOuterY;
         d += "A" + r2 + " " + r2 + " 0 " + f + " 0 " + begOuterX + " " + begOuterY;
 
         // 开头
-        if (config["arc-start-cap"] == 'round')
+        if (config.arcStartCap == 'round')
             d += "A" + r + " " + r + " " + " 0 1 0 " + begInnerX + " " + begInnerY;
-        else if (config["arc-start-cap"] == '-round')
+        else if (config.arcStartCap == '-round')
             d += "A" + r + " " + r + " " + " 0 1 1 " + begInnerX + " " + begInnerY;
         else
             d += "L" + begInnerX + " " + begInnerY;
 
-        if (config["arc-start-cap"] == 'butt') d += "Z";
+        if (config.arcStartCap == 'butt') d += "Z";
 
         setAttribute(el, 'd', d);
     });

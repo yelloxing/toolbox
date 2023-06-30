@@ -52,7 +52,7 @@ export default function (obj) {
                 // 获取画笔并进行初始化
                 var painter = canvasRender(canvas).config({
                     textAlign: "center",
-                    "font-family": "sans-serif"
+                    "fontFamily": "sans-serif"
                 });
 
                 // 绘制

@@ -32,7 +32,7 @@ export default function (painter, attr) {
         'lineWidth': 1,
         'fillStyle': attr.color,
         'strokeStyle': attr.color,
-        'font-size': attr["font-size"],
+        'fontSize': attr["font-size"],
         'textAlign': (attr.direction == 'LR' || attr.direction == 'RL') ? 'center' : (
             (
                 (attr.direction == 'BT' && attr["mark-direction"] == 'right') ||

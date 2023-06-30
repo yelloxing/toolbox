@@ -114,7 +114,7 @@ export default function (obj, props) {
 
                 painter.config({
                     'textAlign': 'center',
-                    'font-size': 14,
+                    'fontSize': 14,
                     'fillStyle': 'black'
                 })
 

@@ -64,7 +64,7 @@ export default function (obj) {
                         painter.config({
                             textAlign: "center",
                             fillStyle: "black",
-                            "font-size": 10
+                            "fontSize": 10
                         });
 
                         var dxy;

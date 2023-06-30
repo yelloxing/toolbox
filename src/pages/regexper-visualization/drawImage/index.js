@@ -5,7 +5,7 @@ var normalConfig = {
     'strokeStyle': '#000000',
     'lineDash': [],
     'lineWidth': 2,
-    "font-size": 12
+    "fontSize": 12
 };
 
 export default function drawImage(painter, imageData, left, top) {
@@ -17,7 +17,7 @@ export default function drawImage(painter, imageData, left, top) {
             'strokeStyle': 'red',
             'lineDash': [2],
             'lineWidth': 1,
-            'font-size': 10
+            'fontSize': 10
         })
             .strokeRect(left + 5, top + 5, imageData.width - 10, imageData.height - 10)
 
@@ -115,7 +115,7 @@ export default function drawImage(painter, imageData, left, top) {
 
                     painter.config({
                         'fillStyle': 'gray',
-                        'font-size': 10
+                        'fontSize': 10
                     })
                         // 提示文字
                         .fillText(purview, _left + _helpWidth + colItem.width * 0.5, _top + colItem.height + _helpHeight - 5);

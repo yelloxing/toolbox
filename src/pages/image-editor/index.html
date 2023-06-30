@@ -181,8 +181,11 @@
 </div>
 
 <!-- 画布 -->
-<div class="image">
+<div class="image" ref="editorView">
     <canvas ref="mycanvas"
         ui-bind:style="'transform:scale('+scale+');left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px;margin-top:50px;margin-left:calc(50% - ' + width * 0.5 + 'px);'">
+    </canvas>
+    <canvas ref="mycursor"
+        ui-bind:style="'pointer-events:none;transform:scale('+scale+');left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px;margin-top:50px;margin-left:calc(50% - ' + width * 0.5 + 'px);'">
     </canvas>
 </div>

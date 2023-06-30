@@ -166,8 +166,11 @@
             &>canvas {
                 position: absolute;
                 outline: 1px solid #ccc;
-                // cursor: none;
-                background-image: url('./mosaic.png');
+                cursor: none;
+
+                &:first-child {
+                    background-image: url('./mosaic.png');
+                }
             }
         }
     }

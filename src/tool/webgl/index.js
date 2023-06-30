@@ -73,8 +73,9 @@ export default function (node, opts) {
                 // 创建纹理
                 var texture = initTexture(gl, type, unit, _type_);
 
-                // 配置纹理（默认配置）
+                // 配置纹理
                 gl.texParameteri(type, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                gl.texParameteri(type, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
                 gl.texParameteri(type, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(type, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 

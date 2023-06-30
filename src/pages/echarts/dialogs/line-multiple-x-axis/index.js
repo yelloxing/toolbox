@@ -58,7 +58,7 @@ export default function (obj, props) {
 
                 hadInit = false;
                 painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight).config({
-                    "font-size": 12
+                    "fontSize": 12
                 });
 
                 // 根据值计算出对应的坐标y值

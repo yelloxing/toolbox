@@ -26,7 +26,17 @@ export default function (obj) {
 
             // 打开应用
             goto: function (event, target) {
-                this.$openView(target.getAttribute('tag'));
+                var winName = target.getAttribute('tag');
+
+                var index, items = document.getElementById('wins-line-id').children;
+                for (index = 0; index < items.length; index++) {
+                    if (items[index].children[0].getAttribute('tag') == winName) {
+                        items[index].click();
+                        return;
+                    }
+                }
+
+                this.$openView(winName);
             },
 
             // 打开弹框

@@ -2,18 +2,40 @@
 export var mainView = function () {
 
     var modelValue = [{
-        type: "default",
-        value: {
-            color: [0.5, 0.5, 0.5, 1],
-            method: "lines",
-            points: []
+        geometry: {
+            attributes: {
+                position: {
+                    array: [],
+                    count: 0,
+                    itemSize: 3
+                }
+            },
+            type: "LINES"
+        },
+        material: {
+            color: {
+                r: 0.5,
+                g: 0.5,
+                b: 0.5
+            }
         }
     }, {
-        type: "default",
-        value: {
-            color: [0.8, 0.8, 0.8, 1],
-            method: "lines",
-            points: []
+        geometry: {
+            attributes: {
+                position: {
+                    array: [],
+                    count: 0,
+                    itemSize: 3
+                }
+            },
+            type: "LINES"
+        },
+        material: {
+            color: {
+                r: 0.8,
+                g: 0.8,
+                b: 0.8
+            }
         }
     }];
 
@@ -21,7 +43,7 @@ export var mainView = function () {
 
         // 深色线
         if (i % 5 == 0) {
-            modelValue[0].value.points.push(
+            modelValue[0].geometry.attributes.position.array.push(
 
                 // 横
                 // [-1,0,-1+(2/25)*i]
@@ -36,7 +58,7 @@ export var mainView = function () {
 
         // 浅色线
         else {
-            modelValue[1].value.points.push(
+            modelValue[1].geometry.attributes.position.array.push(
                 -1, 0, 0.08 * i - 1,
                 1, 0, 0.08 * i - 1,
                 0.08 * i - 1, 0, -1,
@@ -46,11 +68,14 @@ export var mainView = function () {
 
     }
 
+    modelValue[0].geometry.attributes.position.count = modelValue[0].geometry.attributes.position.array.length / 3;
+    modelValue[1].geometry.attributes.position.count = modelValue[1].geometry.attributes.position.array.length / 3;
+
     return modelValue;
 };
 
 // 方向图标
-export var directiveView = function () {
+export var axios = function () {
 
     return [
 

@@ -82,12 +82,12 @@ export default function (obj, props) {
 
                 // 左上文字
                 painter.config({
-                    "font-size": 18,
-                    "font-weight": 800
+                    "fontSize": 18,
+                    "fontWeight": 800
                 }).fillText("How expensive is it to rent an apartment in China?", 20, 20)
                     .config({
-                        "font-size": 12,
-                        "font-weight": 400,
+                        "fontSize": 12,
+                        "fontWeight": 400,
                         "fillStyle": "#70727b"
                     }).fillText("Data from https://www.numbeo.com", 20, 45);
 
