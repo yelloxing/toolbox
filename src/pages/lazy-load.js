@@ -78,5 +78,10 @@ export default {
     // Excel 表格
     "excel": function () {
         return import('./excel/index.js')
+    },
+
+    // npm包下载统计
+    "npm-download": function () {
+        return import('./npm-download/index.js')
     }
 };

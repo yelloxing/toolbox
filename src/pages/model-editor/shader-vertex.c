@@ -9,5 +9,7 @@ void main()
     float dist = 4.0;
 
     // 使用投影直接计算
+    // 为保证纹理和相对位置正确
+    // x、y、z的改变满足线性变换
     gl_Position = vec4((dist + 1.0) * temp.x, (dist + 1.0) * temp.y, dist * (dist + temp.z) + 1.0 - dist * dist, temp.w * 2.0 * (dist + temp.z));
 }
