@@ -1,6 +1,6 @@
 [dialog-view='debugger'] {
     width: 340px;
-    height: calc(100vh - 60px);
+    height: calc(var(--height) - 60px);
     left: calc(50vw - 170px);
     top: 30px;
     background-color: white;

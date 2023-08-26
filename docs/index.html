@@ -19,30 +19,39 @@
         });
     </script>
     <script>
+
+    window.process = {
+        "env" : {
+            "NODE_ENV" : "production"
+        }
+    };
+
     /* 
      * 统一全局信息注入
      */
     window._project_ = {
 
         // 应用名称
-        name:"toolbox",
+        "name":"toolbox",
 
         // 版本号
-        version:"0.3.0",
+        "version":"0.3.1",
 
         // 代码仓库地址
-        repository:"https://github.com/zxl20070701/toolbox",
+        "repository":"https://github.com/zxl20070701/toolbox",
 
         // 提bug地址
-        bugs:"https://github.com/zxl20070701/toolbox/issues",
+        "bugs":"https://github.com/zxl20070701/toolbox/issues",
 
         // 作者信息
-        author:{"name":"zxl20070701","url":"https://github.com/zxl20070701"}
+        "author":{"name":"zxl20070701","url":"https://github.com/zxl20070701"}
     };
-</script><script defer="defer" src="./dist/main-v0.3.0.js"></script>
+</script><script defer="defer" src="./dist/main-v0.3.1.js"></script>
 </head>
 
 <body>
+
+    <div class="help-height" id="help-height"></div>
 
     <!-- 桌面 -->
     <div id="desktop-root" page-view="desktop"></div>

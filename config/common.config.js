@@ -66,7 +66,7 @@ module.exports = {
         handler: function (source) {
 
             // 测试文件
-            if (/\.test\.html$/.test(this.filepath)) {
+            if (/\.spec\.html$/.test(this.filepath)) {
                 return source;
             }
 

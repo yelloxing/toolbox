@@ -11,11 +11,9 @@ export var initTexture = function (gl, type, unit, _type_) {
     // 创建纹理对象
     var texture = gl.createTexture();
 
-    if (_type_ == '2d') {
-        unit = unit || 0;
-        // 开启纹理单元，unit表示开启的编号
-        gl.activeTexture(gl['TEXTURE' + unit]);
-    }
+    unit = unit || 0;
+    // 开启纹理单元，unit表示开启的编号
+    gl.activeTexture(gl['TEXTURE' + unit]);
 
     // 绑定纹理对象到目标上
     gl.bindTexture(type, texture);

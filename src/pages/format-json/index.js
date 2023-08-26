@@ -28,7 +28,6 @@ export default function (obj) {
         },
         methods: {
             formatJSON: function () {
-
                 try {
                     targetEditor.valueOf(JSON.stringify(formatJSON(sourceEditor.valueOf()), null, 4));
                 } catch (e) {

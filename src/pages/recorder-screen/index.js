@@ -3,6 +3,7 @@ import './index.scss';
 
 export default function (obj) {
     var mediaRecorder;
+    
     return {
         name: "recorder-screen",
         render: template,

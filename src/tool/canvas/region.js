@@ -1,4 +1,5 @@
 import canvasRender from "./index.js";
+import assemble from "../assemble"
 
 export default function (canvas, width, height) {
 
@@ -16,9 +17,8 @@ export default function (canvas, width, height) {
         willReadFrequently: true
     });
 
-    var regions = {},//区域映射表
-        rgb = [0, 0, 0],//区域标识色彩,rgb(0,0,0)表示空白区域
-        p = 'r';//色彩增值位置
+    var regions = {}; //区域映射表
+    var regionAssemble = assemble(0, 255, 10, 3);
 
     var drawRegion = false;
 
@@ -46,23 +46,10 @@ export default function (canvas, width, height) {
             } else {
                 drawRegion = true;
 
-                if (regions[regionName] == undefined) regions[regionName] = {
-                    'r': function () {
-                        rgb[0] += 1;
-                        p = 'g';
-                        return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                    },
-                    'g': function () {
-                        rgb[1] += 1;
-                        p = 'b';
-                        return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                    },
-                    'b': function () {
-                        rgb[2] += 1;
-                        p = 'r';
-                        return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                    }
-                }[p]();
+                if (regions[regionName] == undefined) {
+                    var tempColor = regionAssemble();
+                    regions[regionName] = "rgb(" + tempColor[0] + "," + tempColor[1] + "," + tempColor[2] + ")";
+                }
 
                 regionPainter.config({
                     fillStyle: regions[regionName],

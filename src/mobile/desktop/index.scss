@@ -35,7 +35,7 @@
             position: fixed;
             width: 100vw;
             left: 0;
-            bottom: 10px;
+            bottom: 20px;
             text-align: center;
 
             &>ul {
@@ -153,7 +153,7 @@
         left: 0;
         top: 0;
         width: 100vw;
-        height: 100vh;
+        bottom: 0;
         overflow: auto;
     }
 }
@@ -235,4 +235,20 @@ header {
 
 [tag="what"] {
     background-image: url('./what.png');
+}
+
+[tag="format-json"] {
+    background-image: url('./format-json.png');
+}
+
+[tag="scss"] {
+    background-image: url('./scss.png');
+}
+
+[tag="recorder-screen"] {
+    background-image: url('./recorder-screen.png');
+}
+
+[tag="regexper-visualization"] {
+    background-image: url('./regexper-visualization.png');
 }

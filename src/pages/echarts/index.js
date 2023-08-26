@@ -18,9 +18,9 @@ export default function (obj) {
         },
         methods: {
             openExamples: function (event, target) {
-                this.openDialogs(target.getAttribute('tag'));
+                this.openDialog(target.getAttribute('tag'));
             },
-            openDialogs: function (pagename, isInit) {
+            openDialog: function (pagename, isInit) {
 
                 // 打开
                 if (!isInit) window.location.href = "#/echarts/" + pagename;
@@ -37,7 +37,7 @@ export default function (obj) {
             var urlObj = urlFormat(), _this = this;
 
             if (urlObj.router.length >= 2 && urlObj.router[1] in lazyDialogs) {
-                this.openDialogs(urlObj.router[1], true);
+                this.openDialog(urlObj.router[1], true);
             }
 
             // 生成导航

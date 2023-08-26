@@ -12,13 +12,13 @@ const analyseBundle = require('./pkg/analyseBundle');
 
 const { simpleUrl } = require('./tool');
 
-const globalScript = require('./global');
-
 // 获取命令行参数
 const parsed = require('../nodejs/option')({}, process.argv);
 
 // 获取配置文件
 let config = require('./config')(parsed.config[0]);
+
+const globalScript = require('./global')(config);
 
 let targetFolder = fullPath(config.output.folder, process.cwd());
 

@@ -1,3 +1,6 @@
+import { platformName } from './tool/browser/platform';
+var _platformName = platformName();
+
 import useTemplate from "./framework/useTemplate";
 
 import urlFormat from "./tool/urlFormat";
@@ -17,9 +20,6 @@ import './polyfill/Promise';
 import runDebug from './tool/debugger/index';
 runDebug();
 
-import { platformName } from './tool/browser/platform';
-var _platformName = platformName();
-
 // 桌面壁纸
 document.body.style.backgroundImage = "url(./" + _platformName + "-desktop.jpeg)";
 
@@ -31,6 +31,23 @@ window.systeName = {
 
 // 应用列表
 lazyLoad[_platformName + "Pages"]().then(function (data1) {
+    var pageHeight = "100vh";
+
+    if (_platformName == 'mobile') {
+        var trueHeight = document.getElementById('help-height').clientHeight;
+        document.body.style.height = trueHeight + "px";
+
+        pageHeight = trueHeight + "px";
+    } else {
+        document.body.style.height = "100vh";
+    }
+    document.body.removeChild(document.getElementById('help-height'));
+
+    // 设置高变量
+    var styleEl = document.createElement('style');
+    styleEl.innerHTML = ":root { --height:" + pageHeight + " }";
+    document.getElementsByTagName('head')[0].appendChild(styleEl);
+
     var lazyPages = data1.default;
 
     // 启动桌面
@@ -48,8 +65,8 @@ lazyLoad[_platformName + "Pages"]().then(function (data1) {
 
         // 默认显示桌面
         if (!(pagename in lazyPages)) pagename = "desktop";
-        var goDesktop = function () {
-            window.location.href = "#/desktop";
+        var goDesktop = function (init) {
+            if (!init) window.location.href = "#/desktop";
 
             document.getElementsByTagName('title')[0].innerText = "桌面" + window.systeName;
             document.getElementById('icon-logo').setAttribute('href', {
@@ -336,7 +353,7 @@ lazyLoad[_platformName + "Pages"]().then(function (data1) {
         if (pagename != "desktop") {
             openView(pagename, {}, true);
         } else {
-            goDesktop();
+            goDesktop(true);
         }
     });
 

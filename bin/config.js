@@ -31,7 +31,7 @@ module.exports = function (configUrl) {
                             content: config.loader[k].handler.call({
                                 filepath: _filepath
                             }, content + ""),
-                            type: /\.test\.html$/.test(_filepath) ? "text/html" : "application/javascript"
+                            type: /\.spec\.html$/.test(_filepath) ? "text/html" : "application/javascript"
                         };
                     }
                 }
