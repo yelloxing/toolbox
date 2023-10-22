@@ -217,7 +217,7 @@ module.exports = function (source) {
         else if (blocks[i].type == 'statement') {
 
             // 如果是第一个
-            j = 1
+            j = 1;
             var preType = blocks[i - j].type;
             while (['comment-double', 'comment-single'].indexOf(preType) > -1) {
                 j += 1;

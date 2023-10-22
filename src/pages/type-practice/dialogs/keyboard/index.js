@@ -8,6 +8,10 @@ export default function (obj) {
         render: template,
         data: {
 
+        },
+        mounted() {
+
+
         }
     };
 };

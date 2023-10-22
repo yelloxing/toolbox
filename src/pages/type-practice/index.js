@@ -12,7 +12,7 @@ export default function (obj) {
         name: "type-practice",
         render: template,
         beforeFocus: function () {
-            document.getElementsByTagName('title')[0].innerText = "金山打字" + window.systeName;
+            document.getElementsByTagName('title')[0].innerText = "金山打字通" + window.systeName;
             document.getElementById('icon-logo').setAttribute('href', './type-practice/logo.png');
         },
         methods: {

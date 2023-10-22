@@ -70,7 +70,7 @@ export default {
         return import('./echarts/index.js')
     },
 
-    // 金山打字
+    // 金山打字通
     "type-practice": function () {
         return import('./type-practice/index.js')
     },

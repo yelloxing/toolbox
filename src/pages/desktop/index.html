@@ -46,7 +46,7 @@
     </li>
     <li class="link" ui-bind:select="select=='type-practice'?'yes':'no'" ui-on:click.stop="doSelect" title="一个打字练习软件"
         tag="type-practice" ui-on:dblclick="goto" ui-right-menu:app>
-        金山打字
+        金山打字通
     </li>
     <li class="link" ui-bind:select="select=='excel'?'yes':'no'" ui-on:click.stop="doSelect" title="Excel 編輯器"
         tag="excel" ui-on:dblclick="goto" ui-right-menu:app>
@@ -57,7 +57,7 @@
     <span class="begin" title="快速开始" tag="begin" ui-on:click.stop="toggleWin"></span>
     <span class="what" tag="what" ui-on:click="openDialog"></span>
     <span class="wins" id="wins-line-id"></span>
-    <span class="time">
+    <span class="time" tag="tools" ui-on:click.stop="toggleWin">
         <div ui-bind="time"></div>
         <div ui-bind="date"></div>
     </span>

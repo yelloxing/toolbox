@@ -10,6 +10,7 @@ export default function (navRootEl, editorRootEl, fileName, fileType, fileConten
     navRootEl.appendChild(navItem);
 
     navItem.innerText = fileName;
+    navItem.setAttribute("file-type", fileType);
 
     var navItem_close = document.createElement('em');
     navItem.appendChild(navItem_close);

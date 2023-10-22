@@ -14,7 +14,7 @@ var formatTimeItem = function (val) {
 var wins = {}, isWinOpen = {};
 export default function (obj) {
     return {
-        name:"desktop",
+        name: "desktop",
         render: template,
         data: {
 
@@ -36,6 +36,7 @@ export default function (obj) {
             // 打开弹框
             openDialog: function (event, target) {
                 if (isWinOpen.begin) this.toggleWin("begin");
+                if (isWinOpen.tools) this.toggleWin("tools");
 
                 this.$openDialog(target.getAttribute('tag'));
             },
@@ -96,6 +97,7 @@ export default function (obj) {
 
             document.getElementsByTagName("body")[0].addEventListener('click', function () {
                 if (isWinOpen.begin) _this.toggleWin("begin");
+                if (isWinOpen.tools) _this.toggleWin("tools");
             });
         }
     };

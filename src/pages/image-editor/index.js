@@ -56,7 +56,7 @@ export default function (obj) {
             backcolor: obj.ref('black'), // 背景色
 
             // 移动工具
-            move_size: obj.ref(1), // 单次移动距离
+            move_size: obj.ref(5), // 单次移动距离
 
             // 橡皮擦
             eraser_size: obj.ref(10), // 橡皮擦大小
@@ -506,54 +506,57 @@ export default function (obj) {
 
             // 导入或打开图片
             openImage: function (event, target) {
+                var i, _this = this;
+                for (i = 0; i < target.files.length; i++) {
+                    (function (i) {
+                        var file = target.files[i];
+                        var reader = new FileReader();
 
-                var file = target.files[0];
-                var reader = new FileReader();
+                        reader.onload = function () {
+                            var image = new Image();
 
-                var _this = this;
-                reader.onload = function () {
-                    var image = new Image();
+                            image.onload = function () {
 
-                    image.onload = function () {
+                                var newLayerCanvas;
 
-                        var newLayerCanvas;
+                                // 置入
+                                // 置入就是在原来的基础上新增内容
+                                // 然后会居中展开，不会修改画布大小
+                                if (target.getAttribute('flag') == 'append') {
 
-                        // 置入
-                        // 置入就是在原来的基础上新增内容
-                        // 然后会居中展开，不会修改画布大小
-                        if (target.getAttribute('flag') == 'append') {
+                                    var _left = (_this.width - image.width) * 0.5;
+                                    var _top = (_this.height - image.height) * 0.5;
+                                    newLayerCanvas = imageToCanvas(image, _left, _top, _this.width, _this.height);
+                                }
 
-                            var _left = (_this.width - image.width) * 0.5;
-                            var _top = (_this.height - image.height) * 0.5;
-                            newLayerCanvas = imageToCanvas(image, _left, _top, _this.width, _this.height);
+                                // 打开
+                                // 就是把当前环境改为打开的内容
+                                // 然后会根据图片大小修改画布大小
+                                else {
+                                    newLayerCanvas = imageToCanvas(image);
+
+                                    // 图层重置
+                                    layerRootEl.innerHTML = "";
+                                    _this.layers = [];
+
+                                    // 画布大小重置
+                                    _this.width = image.width;
+                                    _this.height = image.height;
+
+                                    // 画笔和内容
+                                    painter = canvasRender(_this._refs.mycanvas.value, _this.width, _this.height);
+                                    painter.clearRect(0, 0, image.width, image.height);
+
+                                    cursorPainter = canvasRender(_this._refs.mycursor.value, _this.width, _this.height);
+
+                                }
+                                _this.appendLayer(newLayerCanvas, file.name);
+                            }
+                            image.src = reader.result;
                         }
-
-                        // 打开
-                        // 就是把当前环境改为打开的内容
-                        // 然后会根据图片大小修改画布大小
-                        else {
-                            newLayerCanvas = imageToCanvas(image);
-
-                            // 图层重置
-                            layerRootEl.innerHTML = "";
-                            _this.layers = [];
-
-                            // 画布大小重置
-                            _this.width = image.width;
-                            _this.height = image.height;
-
-                            // 画笔和内容
-                            painter = canvasRender(_this._refs.mycanvas.value, _this.width, _this.height);
-                            painter.clearRect(0, 0, image.width, image.height);
-
-                            cursorPainter = canvasRender(_this._refs.mycursor.value, _this.width, _this.height);
-
-                        }
-                        _this.appendLayer(newLayerCanvas, file.name);
-                    }
-                    image.src = reader.result;
+                        reader.readAsDataURL(file);
+                    })(i);
                 }
-                reader.readAsDataURL(file)
             },
 
             // 保存图片

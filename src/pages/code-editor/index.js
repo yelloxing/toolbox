@@ -74,14 +74,16 @@ export default function (obj) {
                                     textEl.innerText = list[i].name;
                                     textEl.setAttribute('is-directory', list[i].isDirectory);
 
+
                                     textEl.setAttribute('load', 'no'); // 目录是否加载或文件是否已经打开
                                     if (list[i].isDirectory == 'yes') {
                                         textEl.setAttribute('open', 'no'); // 目录是否打开
+                                        textEl.setAttribute('file-type', "folder");
                                     } else {
 
                                         var typeName = getTypeName(list[i].name);
-                                        if (typeName) textEl.setAttribute('type', typeName); //  文件类型
-
+                                        if (typeName) textEl.setAttribute('file-type', typeName); //  文件类型
+                                        else textEl.setAttribute('file-type', "plain");
                                     }
 
                                     textEl.addEventListener('click', function () {
@@ -110,13 +112,13 @@ export default function (obj) {
                                                 list[i].handle.getFile().then(function (file) {
                                                     var reader = new FileReader();
                                                     reader.onload = function () {
-                                                        pushNavEditor(_this._refs.nav.value, _this._refs.editor.value, textEl.innerText, textEl.getAttribute('type'), reader.result, function (_currentInfo) {
+                                                        pushNavEditor(_this._refs.nav.value, _this._refs.editor.value, textEl.innerText, textEl.getAttribute('file-type'), reader.result, function (_currentInfo) {
                                                             currentInfo = _currentInfo;
                                                         }, list[i].handle, textEl);
                                                     };
 
                                                     // 图片
-                                                    if (textEl.getAttribute('type') == 'image') reader.readAsDataURL(file);
+                                                    if (textEl.getAttribute('file-type') == 'image') reader.readAsDataURL(file);
 
                                                     // 普通文本
                                                     else reader.readAsText(file);
