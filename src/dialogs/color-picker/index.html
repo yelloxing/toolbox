@@ -5,7 +5,8 @@
 </div>
 <div class="drap">
     <div class="left"
-        ui-bind:style="'background-color:rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + color[3] + ')'">
+        ui-bind:style="'background-color:rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + color[3] + ')'"
+        ui-on:click="absorbColor">
     </div>
     <div class="right">
         <div class="color" ui-on:click="updateColor" ui-on:mousemove="updateColor">

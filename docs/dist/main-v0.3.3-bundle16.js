@@ -629,7 +629,7 @@ window.__pkg__bundleSrc__['151']=function(){
 
     // 编辑切割点
     pice: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle48.js','152')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle48.js','152')
     }
 
 };

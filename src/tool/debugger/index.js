@@ -14,12 +14,12 @@ var trace = console.trace;
 window._consoleArray_ = [];
 
 var colors = {
-    log: "gray",
+    log: "black",
     info: 'green',
     debug: 'blue',
     warn: 'f1c010',
     error: 'red',
-    trace: 'white'
+    trace: 'pink'
 };
 window._consoleAppend_ = function (item) {
     var rootEl = document.getElementById('console-el');

@@ -486,7 +486,7 @@ window.__pkg__bundleSrc__['128']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
     // 计算某月多少天
-__pkg__scope_bundle__.calcDays = function (year, month) {
+var _calcDays = function (year, month) {
 
     if (month == 2) {
 
@@ -502,6 +502,8 @@ __pkg__scope_bundle__.calcDays = function (year, month) {
 
 };
 
+__pkg__scope_bundle__.calcDays = _calcDays
+
 // 计算某月日历视图的天数组
 __pkg__scope_bundle__.calcDaysArray = function (year, month) {
 
@@ -513,7 +515,7 @@ __pkg__scope_bundle__.calcDaysArray = function (year, month) {
     if (preNum == -1) preNum = 6;
 
     // 本月多少天
-    var curNum = calcDays(year, month);
+    var curNum = _calcDays(year, month);
 
     // 后置多少天
     var nextNum = 42 - preNum - curNum;
@@ -525,7 +527,7 @@ __pkg__scope_bundle__.calcDaysArray = function (year, month) {
     };
 
     // 前置天数组
-    var preMonthDays = calcDays(month == 1 ? year - 1 : year, month == 1 ? 12 : month - 1);
+    var preMonthDays = _calcDays(month == 1 ? year - 1 : year, month == 1 ? 12 : month - 1);
     for (var i = preNum; i > 0; i--) {
         daysArray.pre.push(preMonthDays - i + 1);
     }

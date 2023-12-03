@@ -157,12 +157,12 @@ window.__pkg__bundleSrc__['65']=function(){
 
     // 快速开始
     begin: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle13.js','66')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle13.js','66')
     },
 
     // 右侧工具
     tools: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle14.js','67')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle14.js','67')
     }
 };
 

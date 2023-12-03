@@ -649,12 +649,12 @@ window.__pkg__bundleSrc__['179']=function(){
 
     // 画布或图像大小
     size: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle49.js','180')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle49.js','180')
     },
 
     // 保存
     save: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle50.js','181')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle50.js','181')
     }
 
 };
@@ -672,12 +672,12 @@ window.__pkg__bundleSrc__['182']=function(){
 
     // 工具箱
     tool: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle51.js','183')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle51.js','183')
     },
 
     // 图层
     layer: function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle52.js','184')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle52.js','184')
     }
 
 };

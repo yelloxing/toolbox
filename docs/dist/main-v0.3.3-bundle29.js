@@ -107,17 +107,17 @@ window.__pkg__bundleSrc__['245']=function(){
 
     // 键盘练习
     "keyboard": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle62.js','246')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle62.js','246')
     },
 
     // 英文打字
     "english": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle63.js','247')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle63.js','247')
     },
 
     // 拼音打字
     "pinyin": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle64.js','248')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle64.js','248')
     }
 };
 

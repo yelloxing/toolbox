@@ -108,12 +108,12 @@ window.__pkg__bundleSrc__['301']=function(){
 
     // 多X轴折线图
     "line-multiple-x-axis": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle65.js','302')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle65.js','302')
     },
 
     // 气压表
     "gauge-barometer": function () {
-        return window.__pkg__getLazyBundle('./dist/main-v0.3.2-bundle66.js','303')
+        return window.__pkg__getLazyBundle('./dist/main-v0.3.3-bundle66.js','303')
     }
 
 };

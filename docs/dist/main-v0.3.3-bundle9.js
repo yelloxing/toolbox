@@ -89,6 +89,21 @@ __pkg__scope_bundle__.default= function (obj, props) {
                 }
             },
 
+            // 吸取颜色
+            absorbColor: function () {
+                var _this = this;
+
+                var dropper = new EyeDropper();
+                dropper.open().then(function (res) {
+                    _this.color = formatColor(res.sRGBHex);
+
+                    // 更新色彩大块
+                    drawColorCanvas(painter, _this.color[0], _this.color[1], _this.color[2]);
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            },
+
             // 选择颜色
             selectColor: function (event) {
                 var position = this.calcByPosition(event, true);
@@ -137,7 +152,7 @@ __pkg__scope_bundle__.default= function (obj, props) {
 window.__pkg__bundleSrc__['99']=function(){
     var __pkg__scope_bundle__={};
     var __pkg__scope_args__;
-    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,2,5,14]},{"type":"tag","name":"header","attrs":{"ui-dragdrop":"","ui-bind":"title"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"canvas","ui-on:click":"selectColor","ui-on:mousemove":"selectColor"},"childNodes":[3,4]},{"type":"tag","name":"canvas","attrs":{"id":"color-picker-canvas"},"childNodes":[]},{"type":"tag","name":"span","attrs":{},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"drap"},"childNodes":[6,7]},{"type":"tag","name":"div","attrs":{"class":"left","ui-bind:style":"'background-color:rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + color[3] + ')'"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"right"},"childNodes":[8,11]},{"type":"tag","name":"div","attrs":{"class":"color","ui-on:click":"updateColor","ui-on:mousemove":"updateColor"},"childNodes":[9,10]},{"type":"tag","name":"div","attrs":{"ui-on:click":"updateColor"},"childNodes":[]},{"type":"tag","name":"span","attrs":{"id":"color-cursor-id"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"alpha","ui-on:click":"updateAlpha","ui-on:mousemove":"updateAlpha"},"childNodes":[12,13]},{"type":"tag","name":"div","attrs":{"ui-on:click":"updateAlpha","ui-bind:style":"'background-image:linear-gradient(to right, #f000, rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'"},"childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-bind:style":"'left:'+(color[3]*200-6)+'px;'"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"btns"},"childNodes":[15,17]},{"type":"tag","name":"button","attrs":{"class":"cancel","ui-on:click":"doClose"},"childNodes":[16]},{"type":"text","content":"取消","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"submit","ui-on:click":"doSubmit"},"childNodes":[18]},{"type":"text","content":"确定","childNodes":[]}]
+    __pkg__scope_bundle__.default= [{"type":"tag","name":"root","attrs":{},"childNodes":[1,2,5,14]},{"type":"tag","name":"header","attrs":{"ui-dragdrop":"","ui-bind":"title"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"canvas","ui-on:click":"selectColor","ui-on:mousemove":"selectColor"},"childNodes":[3,4]},{"type":"tag","name":"canvas","attrs":{"id":"color-picker-canvas"},"childNodes":[]},{"type":"tag","name":"span","attrs":{},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"drap"},"childNodes":[6,7]},{"type":"tag","name":"div","attrs":{"class":"left","ui-bind:style":"'background-color:rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + color[3] + ')'","ui-on:click":"absorbColor"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"right"},"childNodes":[8,11]},{"type":"tag","name":"div","attrs":{"class":"color","ui-on:click":"updateColor","ui-on:mousemove":"updateColor"},"childNodes":[9,10]},{"type":"tag","name":"div","attrs":{"ui-on:click":"updateColor"},"childNodes":[]},{"type":"tag","name":"span","attrs":{"id":"color-cursor-id"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"alpha","ui-on:click":"updateAlpha","ui-on:mousemove":"updateAlpha"},"childNodes":[12,13]},{"type":"tag","name":"div","attrs":{"ui-on:click":"updateAlpha","ui-bind:style":"'background-image:linear-gradient(to right, #f000, rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'"},"childNodes":[]},{"type":"tag","name":"span","attrs":{"ui-bind:style":"'left:'+(color[3]*200-6)+'px;'"},"childNodes":[]},{"type":"tag","name":"div","attrs":{"class":"btns"},"childNodes":[15,17]},{"type":"tag","name":"button","attrs":{"class":"cancel","ui-on:click":"doClose"},"childNodes":[16]},{"type":"text","content":"取消","childNodes":[]},{"type":"tag","name":"button","attrs":{"class":"submit","ui-on:click":"doSubmit"},"childNodes":[18]},{"type":"text","content":"确定","childNodes":[]}]
 
     return __pkg__scope_bundle__;
 }

@@ -67,6 +67,21 @@ export default function (obj, props) {
                 }
             },
 
+            // 吸取颜色
+            absorbColor: function () {
+                var _this = this;
+
+                var dropper = new EyeDropper();
+                dropper.open().then(function (res) {
+                    _this.color = formatColor(res.sRGBHex);
+
+                    // 更新色彩大块
+                    drawColorCanvas(painter, _this.color[0], _this.color[1], _this.color[2]);
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            },
+
             // 选择颜色
             selectColor: function (event) {
                 var position = this.calcByPosition(event, true);
