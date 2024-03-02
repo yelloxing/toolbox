@@ -104,7 +104,7 @@ export default function (obj, props) {
                 width = mycontent.clientWidth;
                 height = mycontent.clientHeight;
 
-                painter = canvasRender(mycanvas, width, height);
+                painter = canvasRender(mycanvas, width, height, true);
 
                 // 计算球数据
                 var bubbles = [], legends = [];

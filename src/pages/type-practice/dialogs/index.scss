@@ -3,13 +3,15 @@
     top: calc(50vh - 300px);
     user-select: none;
     width: 900px;
-    height: 600px;
+    height: 550px;
 
     &>header {
         text-align: left;
         line-height: 50px;
         background: linear-gradient(45deg, #6fb5ec, #d2e4f2, #0b71c1);
         white-space: nowrap;
+        box-shadow: -3px 3px 20px #5f5f62;
+        position: relative;
 
         &>h2 {
             color: #000000;
@@ -45,7 +47,7 @@
         &.content {
             height: calc(100% - 50px);
             text-align: center;
-            background-color: white;
+            background-color: #fafafa;
         }
     }
 }

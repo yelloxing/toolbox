@@ -4,21 +4,22 @@ import { initPainterConfig } from './config';
 
 // 画笔对象
 
-export default function (canvas, width, height, opts) {
+export default function (canvas, width, height, opts, isScale) {
 
     // 设置宽
     if (width) {
         canvas.style.width = width + "px";
-        canvas.setAttribute('width', width);
+        canvas.setAttribute('width', (isScale ? 2 : 1) * width);
     }
 
     // 设置高
     if (height) {
         canvas.style.height = height + "px";
-        canvas.setAttribute('height', height);
+        canvas.setAttribute('height', (isScale ? 2 : 1) * height);
     }
 
     var painter = canvas.getContext("2d", opts || {});
+    if (isScale) painter.scale(2, 2);
 
     // 默认配置canvas2D对象已经存在的属性
     painter.textBaseline = 'middle';

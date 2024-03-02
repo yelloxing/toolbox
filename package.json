@@ -1,6 +1,6 @@
 {
   "name": "toolbox",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "✔️ 实用工具，包含常见的图片编辑、格式转换、视频播放和小游戏等各种工具",
   "scripts": {
     "dev": "node ./bin/server --config ./config/dev.config.js",
@@ -10,7 +10,16 @@
   "repository": "https://github.com/zxl20070701/toolbox",
   "keywords": [
     "toolbox",
-    "H5"
+    "H5",
+    "canvas",
+    "svg",
+    "webgl",
+    "vislite",
+    "algorithm",
+    "regexper",
+    "geoJSON",
+    "snipping",
+    "editor"
   ],
   "author": {
     "name": "zxl20070701",

@@ -65,7 +65,7 @@ export default function (obj, props) {
 
             // 监听画布大小改变
             ResizeObserver(mycontent, function () {
-                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight);
+                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight, true);
 
                 // 圆心和半径
                 cx = mycontent.clientWidth * 0.5;

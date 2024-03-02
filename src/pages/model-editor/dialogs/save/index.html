@@ -1,0 +1,42 @@
+<h2 ui-dragdrop>保存</h2>
+<div class="right-btn">
+    <div>
+        <fieldset>
+            <legend>
+                基础
+            </legend>
+            <ul>
+                <li>
+                    <label>名称：</label>
+                    <input ui-model="name">
+                </li>
+                <li>
+                    <label>类型：</label>
+                    <select ref="type">
+                        <option value="json">JSON</option>
+                    </select>
+                </li>
+                <li>
+                    <label>格式：</label>
+                    <select ref="format">
+                        <option value="vislite">VISLite</option>
+                    </select>
+                </li>
+            </ul>
+        </fieldset>
+        <div class="tips">
+            <div>
+                1、上述选项中的<a href="https://github.com/oi-contrib/VISLite" target="_blank">VISLite</a>是一个开源项目，具体的可以查看
+                <a href="https://oi-contrib.github.io/VISLite/#/api/webgl/api" target="_blank">
+                    WebGl接口文档</a>。
+            </div>
+            <div>
+                2、导出的是Array&lt;object3D&gt;而不是object3D。
+            </div>
+        </div>
+    </div>
+    <div>
+        <button ui-on:click="doSubmit">确定</button>
+        <button ui-on:click="doClose">取消</button>
+    </div>
+</div>

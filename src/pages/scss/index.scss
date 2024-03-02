@@ -15,16 +15,17 @@
     &>header {
         text-align: left;
         line-height: 30px;
+        height: 30px;
         background-color: #dee1e7;
 
         &>h2 {
             color: #000000;
-            font-size: 12px;
-            padding-left: 35px;
-            background-image: url("./scss.png");
+            font-size: 16px;
+            padding-left: 45px;
+            background-image: url("./scss-font.png");
             background-position: 10px center;
             background-repeat: no-repeat;
-            background-size: auto 60%;
+            background-size: auto 80%;
             font-family: cursive;
             display: inline-block;
         }
@@ -46,6 +47,7 @@
             position: relative;
             font-family: cursive;
             font-weight: 200;
+            font-size: 16px;
 
             &>button {
                 position: absolute;

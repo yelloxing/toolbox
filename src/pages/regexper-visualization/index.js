@@ -44,13 +44,11 @@ export default function (obj) {
                 // 求解绘制需要的信息
                 var imageData = regexpToJson(this.expressVal, this.isString == 'yes', this._refs.help.value);
 
-                // 设置画布大小
+                // 画布
                 var canvas = this._refs.mycanvas.value;
-                canvas.setAttribute('width', imageData.width + 60);
-                canvas.setAttribute('height', imageData.height + 20);
 
                 // 获取画笔并进行初始化
-                var painter = canvasRender(canvas).config({
+                var painter = canvasRender(canvas, imageData.width + 60, imageData.height + 20, {}, true).config({
                     textAlign: "center",
                     "fontFamily": "sans-serif"
                 });

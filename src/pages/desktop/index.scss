@@ -203,9 +203,12 @@
 
     ul {
         width: 220px;
-        border: 1px solid rgb(190, 189, 189);
-        background-color: rgb(241, 241, 241);
-        border-radius: 3px;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #e5e8ea;
+        border: 1px solid #c3c3c3;
+        font-size: 14px;
+        line-height: 1.4em;
 
         li {
 
@@ -312,16 +315,12 @@
     background-image: url('./geoJSON.png');
 }
 
-[tag="computer"] {
-    background-image: url('./computer.png');
-}
-
 [tag="snipping-tool"] {
     background-image: url('./snipping.png');
 }
 
-[tag="application"] {
-    background-image: url('./application.png');
+[tag="computer"] {
+    background-image: url('./computer.png');
 }
 
 [tag="echarts"] {

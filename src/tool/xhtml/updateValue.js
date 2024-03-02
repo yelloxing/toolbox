@@ -12,7 +12,7 @@ export default function (el, value) {
 
     // 普通的
     else {
-        if (el.value != value || el.textContent != value) {
+        if (el.value !== value || el.textContent !== value) {
             el.value = el.textContent = value;
         }
     }

@@ -82,7 +82,7 @@ export default function (obj, props) {
                     }
                 }
 
-                painter = canvasRender(mycanvas, width, height);
+                painter = canvasRender(mycanvas, width, height, {}, true);
 
                 updateView = function (deep) {
                     painter.clearRect(0, 0, width, height);

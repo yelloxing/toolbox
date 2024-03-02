@@ -11,7 +11,7 @@ module.exports = {
     // 打包出口
     output: {
         folder: "docs",
-        entry: "./dist/main-v" + pkg.version + ".js"
+        entry: "./dist/bundle-v" + pkg.version + ".js"
     },
 
     // 静态资源

@@ -1,6 +1,6 @@
 [dialog-view='what'] {
     left: calc(50vw - 130px);
-    top: calc(50vh - 250px);
+    top: calc(50vh - 200px);
     background-color: transparent;
     user-select: none;
     border-radius: 10px;
@@ -38,6 +38,26 @@
                 left: 5vw;
                 top: 10px;
                 text-align: center;
+            }
+
+            &.system-btn {
+                position: fixed;
+                left: 0;
+                top: 50px;
+                width: 100vw;
+                text-align: center;
+
+                &>button {
+                    border-radius: 5px;
+                    font-size: 12px;
+                    background-color: black;
+                    color: white;
+                    outline: none;
+                    border: none;
+                    padding: 5px 10px;
+                    box-shadow: 0 0 10px 3px white;
+                    margin: 0 10px;
+                }
             }
 
             &.current-tips {

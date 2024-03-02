@@ -1,12 +1,13 @@
 attribute vec4 a_position;
+uniform mat4 u_camera;
 uniform mat4 u_matrix;
 
 void main()
 {
-    vec4 temp =  u_matrix * a_position;
+    vec4 temp = u_camera * u_matrix * a_position;
 
     // 表示眼睛距离vec4(0.0,0.0,1.0)的距离
-    float dist = 4.0;
+    float dist = 2.0;
 
     // 使用投影直接计算
     // 为保证纹理和相对位置正确

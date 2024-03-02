@@ -67,9 +67,11 @@ npm run build
 
 - 3D模型编辑器
 
-可以编辑3D模型，支持格式包括：stl、obj、fbx、mtl、ply、gltf、mod等
+可以编辑3D模型，当前只支持内置的JSON格式
 
 <img src="https://zxl20070701.github.io/toolbox/snipping/model-editor.jpeg">
+
+> 对于常见的格式（stl、obj、fbx、mtl、ply、gltf、mod）将逐步进行支持。
 
 - 音频编辑器
 

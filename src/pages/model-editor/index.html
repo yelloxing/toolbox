@@ -21,7 +21,10 @@
         <button class="close" ui-on:click.stop="$closeView">关闭</button>
     </div>
 </div>
-<div class="content" ref='mainViewRoot'>
+<div class="content" ref='mainViewRoot' ui-on:mousedown="doClick">
+
+    <!-- 区域 -->
+    <canvas ui-bind:width='width' ui-bind:height='height' ref="mainView_region" class="region"></canvas>
 
     <!-- 画布 -->
     <canvas ui-bind:width='width' ui-bind:height='height' ref="mainView"></canvas>

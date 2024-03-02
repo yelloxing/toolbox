@@ -20,10 +20,14 @@ import './polyfill/Promise';
 import runDebug from './tool/debugger/index';
 runDebug();
 
+// 系统相关
+import "./tool/system/keep-time";
+
 // 桌面壁纸
 document.body.style.backgroundImage = "url(./" + _platformName + "-desktop.jpeg)";
 
 // 系统名称
+window.systeNameEn = _platformName;
 window.systeName = {
     "pc": " - Windows 7 定制版本",
     "mobile": " - iPhone 13 定制版本"

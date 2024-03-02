@@ -12,7 +12,7 @@ import remove from '../../tool/xhtml/remove';
 import isString from '../../tool/type/isString';
 import mousePosition from '../../tool/xhtml/mousePosition';
 
-export default function (obj) {
+export default function (obj, props) {
     var i;
 
     var wins = {}, painter, cursorPainter, layerRootEl;
@@ -83,6 +83,13 @@ export default function (obj) {
         },
         mounted: function () {
             var _this = this;
+
+            //  由别的软件触发打开并有初始值
+            if (props.image) {
+                this.width = props.image.width;
+                this.height = props.image.height;
+            }
+
             painter = canvasRender(this._refs.mycanvas.value, this.width, this.height);
 
             // 调整辅助画布大小
@@ -101,7 +108,12 @@ export default function (obj) {
                 var newLayerCanvas = document.createElement('canvas');
                 newLayerCanvas.width = _this.width;
                 newLayerCanvas.height = _this.height;
-                _this.appendLayer(newLayerCanvas, '背景');
+
+                if (props.image) {
+                    newLayerCanvas.getContext("2d").drawImage(props.image, 0, 0);
+                }
+
+                _this.appendLayer(newLayerCanvas, props.image ? props.name : '背景');
             });
 
             // 启动键盘监听
@@ -299,7 +311,6 @@ export default function (obj) {
 
                         this.layers[i].iconEl.style.backgroundImage = "url(" + this.layers[i].painter.toDataURL() + ")";
                     }
-
 
                     painter.drawImage(this.layers[i].canvas);
                 }

@@ -36,7 +36,7 @@ export default function (obj) {
             var canvas = this._refs.mycanvas.value;
 
             // 获取画笔
-            painter = canvasRender(canvas, canvas.clientWidth, canvas.clientHeight);
+            painter = canvasRender(canvas, canvas.clientWidth, canvas.clientHeight, {}, true);
 
             this.updateView();
 

@@ -1,14 +1,14 @@
-import canvasRender from "./index.js";
-import assemble from "../assemble"
+import canvasRender from "./index";
+import assemble from "../assemble";
 
-export default function (canvas, width, height) {
+export default function (canvas, width, height, isScale) {
 
     // 初始化尺寸
     width = width || canvas.clientWidth;
     height = height || canvas.clientHeight;
 
     // 获取绘制画笔
-    var drawPainter = canvasRender(canvas, width, height);
+    var drawPainter = canvasRender(canvas, width, height, {}, isScale);
 
     // 获取区域画笔
     var regionPainter = canvasRender(document.createElement('canvas'), width, height, {

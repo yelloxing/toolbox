@@ -20,10 +20,12 @@ export default function (obj) {
                 this.openDialog(target.getAttribute('tag'));
             },
             openDialog: function (pagename, isInit) {
-                
+
                 // 打开
                 if (!isInit) window.location.href = "#/type-practice/" + pagename;
-                this.$openDialog(lazyDialogs[pagename]).then(function () {
+                this.$openDialog(lazyDialogs[pagename], {
+                    dialogs: lazyDialogs
+                }).then(function () {
 
                     // 关闭后恢复路由
                     window.location.href = "#/type-practice";

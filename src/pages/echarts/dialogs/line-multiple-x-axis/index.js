@@ -57,7 +57,7 @@ export default function (obj, props) {
                 itemWidth = (mycontent.clientWidth - grid.left - grid.right) / data[0].value.length;
 
                 hadInit = false;
-                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight).config({
+                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight, {}, true).config({
                     "fontSize": 12
                 });
 

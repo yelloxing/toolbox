@@ -58,7 +58,7 @@ export default function (obj, props) {
                 var perH = (height - grid.bottom - grid.top) / rulerData[rulerData.length - 1];
                 var perW = (width - grid.left - grid.right) / data.date.length;
 
-                painter = canvasRender(mycanvas, width, height);
+                painter = canvasRender(mycanvas, width, height, true);
 
                 updateView = function (deep) {
                     painter.clearRect(0, 0, mycontent.clientWidth, mycontent.clientHeight).setRegion("");

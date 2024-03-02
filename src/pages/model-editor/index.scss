@@ -55,6 +55,7 @@
                 &.more {
                     position: relative;
                     padding-right: 10px;
+                    z-index: 10;
 
                     &:hover {
                         &>div {
@@ -111,6 +112,14 @@
             overflow: hidden;
             text-align: center;
             background-color: #9fa2a3;
+            position: relative;
+
+            &>.region {
+                position: absolute;
+                z-index: -1;
+                left: 0;
+                top: 0;
+            }
         }
 
         &.axis {

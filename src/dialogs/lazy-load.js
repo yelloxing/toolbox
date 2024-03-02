@@ -18,12 +18,6 @@ export default {
     // 项目介绍
     what: function () {
         return import('./what/index.js')
-    },
-
-
-    // 截图工具
-    "snipping-tool": function () {
-        return import('./snipping-tool/index.js')
     }
 
 };

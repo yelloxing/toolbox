@@ -15,6 +15,11 @@ export default function (obj) {
             project: window._project_
         },
         methods: {
+            showApp: function () {
+                this.$openView("computer", {
+                    init: "application"
+                });
+            },
             openApp: function (event, target) {
                 this.$openView(target.getAttribute('tag'));
             }

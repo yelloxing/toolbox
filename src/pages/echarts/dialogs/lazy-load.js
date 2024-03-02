@@ -43,5 +43,10 @@ export default {
     // 金额波浪球
     "money-schedule": function () {
         return import('./money-schedule/index.js')
+    },
+
+    // 水分子式H2O
+    "h2o": function () {
+        return import('./h2o/index.js')
     }
 };

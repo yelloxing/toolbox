@@ -1,7 +1,7 @@
 <div class="application" ref="application">
     <h1>
         常用应用
-        <button tag="application" ui-on:click="openApp">
+        <button ui-on:click="showApp">
             全部内容 ▶
         </button>
     </h1>
@@ -40,7 +40,7 @@
     <h2>
         J
     </h2>
-    <div tag="snipping-tool" ui-on:click="openDialog">
+    <div tag="snipping-tool" ui-on:click="openApp">
         截图工具
     </div>
 
@@ -103,5 +103,4 @@
     <a target="_blank" ui-bind:href="project.bugs">提建议</a>
     <hr />
     <a target="_blank" href="https://zxl20070701.github.io/notebook/">文档笔记</a>
-    <a target="_blank" href="https://github.com/zxl20070701/laboratory">实验仓库</a>
 </div>

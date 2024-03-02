@@ -48,5 +48,10 @@ export default {
     // 正则表达式可视化
     "regexper-visualization": function () {
         return import('./regexper-visualization/index.js')
+    },
+
+    // 视频播放器
+    "video-play": function () {
+        return import('./video-play/index.js')
     }
 };

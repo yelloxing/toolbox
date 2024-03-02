@@ -52,7 +52,7 @@ export default function (obj, props) {
 
                 if (radius <= 0) return;
 
-                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight).config({
+                painter = canvasRender(mycanvas, mycontent.clientWidth, mycontent.clientHeight, true).config({
                     shadowColor: "#555555"
                 });
 

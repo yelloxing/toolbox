@@ -4,7 +4,8 @@
     &>button {
         position: absolute;
         height: 30px;
-        padding: 0 30px;
+        line-height: 30px;
+        padding: 0 10px;
         border: none;
         cursor: pointer;
         background-color: red;
@@ -12,6 +13,7 @@
         border-radius: 15px;
         top: 7.5px;
         right: 45px;
+        font-size: 13px;
 
         &[active='no'] {
             background-color: rgb(239, 139, 139);

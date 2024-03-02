@@ -60,11 +60,6 @@ export default {
         return import('./computer/index.js')
     },
 
-    // 应用中心
-    "application": function () {
-        return import('./application/index.js')
-    },
-
     // 可视化图表
     "echarts": function () {
         return import('./echarts/index.js')
@@ -83,5 +78,10 @@ export default {
     // npm包下载统计
     "npm-download": function () {
         return import('./npm-download/index.js')
+    },
+
+    // 截图工具
+    "snipping-tool": function () {
+        return import('./snipping-tool/index.js')
     }
 };
